@@ -1,2 +1,5 @@
 # MineDestroyer
-CognitiveScale-CodingAssessment-12/2016
+
+## CognitiveScale
+### CodingAssessment
+### December 5, 2016

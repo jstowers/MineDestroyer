@@ -11,6 +11,15 @@ var scriptFile = process.argv[3];
 let gridIni = fs.readFileSync(fieldFile, 'utf-8');
 let scriptIni = fs.readFileSync(scriptFile, 'utf-8');
 
+function main() {
+
+	let test = makeGridArray(gridIni);
+
+	console.log('test =', test);
+
+
+}
+
 function makeGridArray(string) {
 
 	// split string into an array of characters
