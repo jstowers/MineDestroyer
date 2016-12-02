@@ -14,7 +14,6 @@ let scriptIni = fs.readFileSync(scriptFile, 'utf-8');
 // Call function main()
 main();
 
-
 function main() {
 
 	// create array for each step in script file
@@ -25,11 +24,36 @@ function main() {
 	// loop through each step of scriptArray
 	for (var i = 0; i < scriptArray.length; i++){
 
-		// function to read step (can have multiple actions per step)
-
+		// function to read step and create array of action(s)
+		// can have multiple actions per step
+		let stepArray = makeStepArray(scriptArray[i]);
 
 		// function to perform logic on each action
+		for (var j = 0; j < stepArray.length; j++){
 
+			let fireActions = ['alpha', 'beta', 'gamma', 'delta'];
+			let moveActions = ['north', 'south', 'east', 'west'];
+
+
+			// if action is firing pattern
+			if (fireActions.includes(stepArray[j])){
+				
+
+			} else if (moveActions.includes(stepArray[j])){
+			// if action is move
+
+			} else {
+			// exit game if incorrect action	
+				console.log('ERROR: '+ stepArray[j] + 
+					' is an incorrect firing action or move.' + '\n' + 'Exiting Game.');
+				process.exit(1);
+			}
+
+
+			
+
+
+		} // end stepArray for loop
 
 		// function to calculate result after all actions
 
@@ -41,8 +65,9 @@ function main() {
 
 		// if game not over, loop to next step
 
-	}
-}
+
+	} // end scriptArray for loop
+} // end function main
 
 
 
@@ -58,6 +83,12 @@ function output(step, gridIni, script, resultGrid, result){
 	console.log(resultGrid, '\n');
 	console.log(result[0], '(' + result[1] + ')', '\n');
 
+}
+
+
+function makeStepArray(string) {
+	let strToArr = string.split(' ');
+	return strToArr;
 }
 
 
