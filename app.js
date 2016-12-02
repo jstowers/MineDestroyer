@@ -21,39 +21,54 @@ function main() {
 
 	var gridArray = makeGridArray(gridIni);
 
+	let fireCounter = 0;
+	let moveCounter = 0;
+
 	// loop through each step of scriptArray
 	for (var i = 0; i < scriptArray.length; i++){
 
-		// function to read step and create array of action(s)
-		// can have multiple actions per step
-		let stepArray = makeStepArray(scriptArray[i]);
+		// if script line is blank, then vessel should 
+		// drop 1km without firing or moving.
+		// print result and go to next line
+		if (scriptArray[i] === ''){
+			console.log('inside a blank line');
+			// !!!
+			// call result();
+		}
 
-		// function to perform logic on each action
-		for (var j = 0; j < stepArray.length; j++){
+		// script line contains move, firing pattern, or both
+		else {
+			// function to read step and create array of action(s)
+			// can have multiple actions per step
+			let stepArray = makeStepArray(scriptArray[i]);
 
-			let fireActions = ['alpha', 'beta', 'gamma', 'delta'];
-			let moveActions = ['north', 'south', 'east', 'west'];
+			// function to perform logic on each action
+			for (var j = 0; j < stepArray.length; j++){
 
+				let fireActions = ['alpha', 'beta', 'gamma', 'delta'];
+				let moveActions = ['north', 'south', 'east', 'west'];
 
-			// if action is firing pattern
-			if (fireActions.includes(stepArray[j])){
+				// if action is firing pattern
+				if (fireActions.includes(stepArray[j])){
+					fireCounter += 1;
+					fireInTheHole(gridArray, stepArray[j]);
+					
+
+				}
+				// if action is move
+				else if (moveActions.includes(stepArray[j])){
+					moveCounter += 1;
+					//moveTheShip(gridArray, stepArray[j]);
 				
+				} else {
+				// exit game if incorrect action	
+					console.log('ERROR: '+ stepArray[j] + 
+						' is an incorrect firing action or move.' + '\n' + 'Exiting Game.');
+					process.exit(1);
+				}
 
-			} else if (moveActions.includes(stepArray[j])){
-			// if action is move
-
-			} else {
-			// exit game if incorrect action	
-				console.log('ERROR: '+ stepArray[j] + 
-					' is an incorrect firing action or move.' + '\n' + 'Exiting Game.');
-				process.exit(1);
-			}
-
-
-			
-
-
-		} // end stepArray for loop
+			} // end stepArray for loop
+		}
 
 		// function to calculate result after all actions
 
@@ -65,16 +80,37 @@ function main() {
 
 		// if game not over, loop to next step
 
-
 	} // end scriptArray for loop
 } // end function main
+
+
+function fireInTheHole(grid, pattern) {
+
+	// use the grid size (1x1, 3 x 3, etc.) to determine midpoint 
+	// of grid and place vessel
+	let gridMidPt = Math.round(grid.length/2) - 1;
+	let vesselLoc = [];
+	vesselLoc = [gridMidPt,gridMidPt];
+
+	// need to place ship in middle of grid
+
+
+
+	// 
+
+
+
+
+	// return a resultant grid (??)
+}
+
 
 
 
 
 // function to output result for each step
-// grids are strings
-
+// step = number, gridIni = string; script = string; 
+// resultGrid = string; result = array
 function output(step, gridIni, script, resultGrid, result){
 
 	console.log('Step', step, '\n');
