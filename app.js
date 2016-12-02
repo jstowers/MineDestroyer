@@ -11,14 +11,62 @@ var scriptFile = process.argv[3];
 let gridIni = fs.readFileSync(fieldFile, 'utf-8');
 let scriptIni = fs.readFileSync(scriptFile, 'utf-8');
 
+// Call function main()
+main();
+
+
 function main() {
 
-	let test = makeGridArray(gridIni);
+	// create array for each step in script file
+	var scriptArray = makeScriptArray(scriptIni);
 
-	console.log('test =', test);
+	var gridArray = makeGridArray(gridIni);
 
+	// loop through each step of scriptArray
+	for (var i = 0; i < scriptArray.length; i++){
+
+		// function to read step (can have multiple actions per step)
+
+
+		// function to perform logic on each action
+
+
+		// function to calculate result after all actions
+
+		let result = ['pass', 1]
+
+		// function to output result for step
+		output(i+1, gridIni, scriptArray[i], '. * .', result);
+
+
+		// if game not over, loop to next step
+
+	}
+}
+
+
+
+
+// function to output result for each step
+// grids are strings
+
+function output(step, gridIni, script, resultGrid, result){
+
+	console.log('Step', step, '\n');
+	console.log(gridIni, '\n');
+	console.log(script, '\n');
+	console.log(resultGrid, '\n');
+	console.log(result[0], '(' + result[1] + ')', '\n');
 
 }
+
+
+function makeScriptArray(string) {
+
+	let strToArr = string.split('\n');
+	return strToArr;
+}
+
 
 function makeGridArray(string) {
 
@@ -39,8 +87,6 @@ function makeGridArray(string) {
 		// base case
 		if (string.length === 0) {
 			array.push(storage);
-			//console.log('array = ', array);
-			return array;
 		}
 
 		// if character != '\n'
@@ -62,11 +108,10 @@ function makeGridArray(string) {
 		}
 	}
 
-	return recursive(strToArr);
+	recursive(strToArr);
+
+	return array;
 
 };
-
-makeGridArray(gridIni);
-
 
 
