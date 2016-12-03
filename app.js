@@ -84,7 +84,7 @@ function main() {
 } // end function main
 
 
-// function returns the midpoint [x,y] of an n x m grid
+// function returns the midpoint [x,y] of an n x m grid,
 // where n and m are odd numbers
 function findGridMidpoint(grid) {
 
@@ -103,21 +103,82 @@ function findGridMidpoint(grid) {
 	return [nMid,mMid];
 }
 
+// function returns offset firing pattern
+function getFiringPattern(pattern) {
 
+	let patterns = {};
 
+	patterns.alpha = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+	patterns.beta = [[-1, 0], [0, -1], [0, 1], [1, 0]];
+	patterns.gamma = [[-1, 0], [0, 0], [1, 0]];
+	patterns.delta = [[0, -1], [0, 0], [0, 1]];
+
+	for (key in patterns){
+		if (pattern === key){
+			return patterns[key];
+		}
+	}
+
+}
+
+// function converts firing pattern offsets to grid coordinates
+// and returns only those coordinates that lie within the grid bounds
+function offsetToCords(grid, origin, offsets) {
+
+	// determine n x m grid lengths to check sums of coordinates
+	// n => across
+	let n = grid[0].length;
+	console.log('n =', n);
+
+	// m => down
+	let m = grid.length;
+	console.log('m =', m);
+
+	// define cordStorage array
+	let offsetCordStorage = [];
+
+	// loop through offsets array and sum [x,y] of origin and offset coordinates
+	for (let i = 0; i < offsets.length; i++) {
+		let x = origin[0] + offsets[i][0];
+		let y = origin[1] + offsets[i][1];
+
+		// only return offsets that are in the grid
+		if (x >= 0 && x < n && y >= 0 && y < m ) {
+			offsetCordStorage.push([x,y]);
+		}
+	}
+
+	// return coordinates
+	return offsetCordStorage;
+}
+
+// function executes a torpedo fire command
 function fireInTheHole(grid, pattern) {
 
 	// place ship at middle of grid
 	let shipLoc = findGridMidpoint(grid);
 	console.log('shipLoc = ', shipLoc);
 
+	// return array of offset coordinates for fire pattern
+	let firePattern = getFiringPattern(pattern);
+	console.log('firePattern = ', firePattern);
 
-	// destroy mine if offset === character
+	// convert offset locations to grid coordinates
+	let offsets = offsetToCords(grid, shipLoc, firePattern);
+	console.log('offsets = ', offsets);
 
 
-		// if destroy mine => character becomes 
+	// loop through grid and see if mines are located 
+	// in the offset coordinates
+	
 
 
+
+		// a mine is a character or !== '.'
+
+		// destroy mine if offset === character
+
+		// if destroy mine => character (coordinate) becomes '.'
 
 	// return a resultant grid (??)
 }
