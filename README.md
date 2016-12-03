@@ -55,6 +55,7 @@ computer, follow these easy steps:
 
 4.	GOOD LUCK!!
 
+-------------------------------------------------------------------------
 
 ### Journal
 
