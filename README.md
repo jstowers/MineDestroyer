@@ -75,9 +75,9 @@ Nested Array After:
 This will ensure that an (x,y) coordinate pair is equal
 to an (i, j) pair in the code.
 
-			 i (x) -->
-             0   1   2
-             ---------
-   j	0 |  A   B   C
-   (y)	1 |  D   E   F
-		2 |  G   H   I
+				i (x) -->
+             	0    1   2
+             	----------
+   			0 |  A   B   C
+   	j (y)	1 |  D   E   F
+			2 |  G   H   I
