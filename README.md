@@ -54,3 +54,39 @@ computer, follow these easy steps:
 	  	$ node app.js grid.txt script.txt
 
 4.	GOOD LUCK!!
+
+-------------------------------------------------------------------------
+
+### Journal
+
+Saturday, 12/3/2016
+
+10:05 am => Realized that when looping through a nested array with two
+for loops that the x and y coordinates are switched from the problem
+statement.  To ensure consistency throughout the program, going to try
+and refactor the recursion function that creates a grid into the proper
+format for looping.
+
+Nested Array Before:
+[[A,B,C], [D,E,F], [G,H,I]]
+
+Nested Array After:
+[[A,D,G], [B,E,H], [C,F,I]]
+
+This will ensure that an (x,y) coordinate pair is equal
+to an (i, j) pair in the code.
+
+				 i (x) -->
+             	 0   1   2
+             	----------
+   			0 |	 A   B   C
+   	j (y)	1 |  D   E   F
+			2 |  G   H   I
+
+------------------------------------------------------------------------
+
+2:05 pm => Completed refactor of code and coordinates work fine.  Also 
+refactored function makeResultString() to convert the grid into the
+proper string format for printing to output.
+
+------------------------------------------------------------------------

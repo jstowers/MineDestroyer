@@ -9,6 +9,8 @@ var scriptFile = process.argv[3];
 // Since both files are small, I chose the simpler synchronous
 // calls instead of asynchronous.
 let gridIni = fs.readFileSync(fieldFile, 'utf-8');
+console.log('gridIni = ', gridIni);
+
 let scriptIni = fs.readFileSync(scriptFile, 'utf-8');
 
 // Call function main()
@@ -84,35 +86,26 @@ function main() {
 } // end function main
 
 
-/* DO NOT USE
-function gridSize(grid) {
-
-	// x increases going down
-	let gridDown = grid.length;
-
-	// y increases going across
-	let gridAcross = grid[0].length; 
-
-	return [gridDown, gridAcross];
-}
-*/
-
 
 // function returns the midpoint [x,y] of an n x m grid,
 // where n and m are odd numbers
 function findGridMidpoint(grid) {
 
-	// grid[0].length => n (across)
-	let n = grid[0].length;
+	// n (across) => x axis
+	let n = grid.length;
+	console.log('n = ', n);
 
-	// grid.length => m (down)
-	let m = grid.length;
+	// m (down) => y axis
+	let m = grid[0].length;
+	console.log('m = ', m);
 
 	// midpoint of n
 	let nMid = Math.round(n/2) - 1;
 
 	// midpoint of m
 	let mMid = Math.round(m/2) - 1;
+
+	//console.log('midPoint = [', nMid, ',', mMid, ']');
 
 	return [nMid,mMid];
 }
@@ -158,11 +151,11 @@ function getFiringPattern(pattern) {
 function offsetToCords(grid, origin, offsets) {
 
 	// determine n x m grid lengths to check sums of coordinates
-	// n => across
-	let n = grid[0].length;
+	// n (across) => x axis
+	let n = grid.length;
 
-	// m => down
-	let m = grid.length;
+	// m (down) => y axis
+	let m = grid[0].length;
 
 	// define cordStorage array
 	let offsetCordStorage = [];
@@ -185,8 +178,6 @@ function offsetToCords(grid, origin, offsets) {
 // function executes a torpedo fire command
 function fireInTheHole(grid, pattern) {
 
-	console.log('grid = ', grid);
-
 	// place ship at middle of grid
 	let shipLoc = findGridMidpoint(grid);
 	console.log('shipLoc = ', shipLoc);
@@ -202,31 +193,19 @@ function fireInTheHole(grid, pattern) {
 	// calculate shots fired
 	let shotsFired = offsets.length;
 
-	// Please note that the problem statement has x coordinates
-	// going across and y coordinates going down.
-	// But in looping through this nested array, the y coordinates
-	// go down and the x coordinates go across.
-	// To correct for this discrepancy, I switched the x and y in the 
-	// offsets conditionals so that we're comparing in the correct order.
+	// n => across (x)
+	let n = grid.length;
 
-	// n => across (y)
-	let n = grid[0].length;
+	// m => down (y)
+	let m = grid[0].length;
 
-	// m => down (x)
-	let m = grid.length;
-
-	// loop through grid and see if mines are located 
-	// in the offset coordinates
-	// a mine is a character a-z, A-Z that does not equal '.'
-	// if mine destroyed, change character to '.'
-
-	for (let i = 0; i < offsets.length; i++) {
-		for (let x = 0; x < m; x++){
-			for (let y = 0; y < n; y++){
-				//console.log('x = ', x, ' y = ', y, ' grid[x][y] = ', grid[x][y]);
-				if(grid[x][y] !== '.' && offsets[i][0] === y && offsets[i][1] === x) {
-					//console.log('We have a direct hit');
-					grid[x][y] = '.';
+	for (let k = 0; k < offsets.length; k++) {
+		for (let i = 0; i < n; i++){
+			for (let j = 0; j < m; j++){
+				//console.log('x = ', i, ' y = ', j, ' grid[x][y] = ', grid[i][j]);
+				if(grid[i][j] !== '.' && offsets[k][0] === i && offsets[k][1] === j) {
+					// console.log('We have a direct hit');
+					grid[i][j] = '.';
 				}
 			}
 		}
@@ -235,51 +214,59 @@ function fireInTheHole(grid, pattern) {
 	// return resultant grid + shotsFired
 	console.log('grid result = ', grid);
 	console.log('shotsFired = ', shotsFired);
+
+	// call function to check current location to see if mine exists
+
+
+	// check resultant grid for number of mines remaining
+
+		// if all mines blown away, then win
+
+
 	return [grid, shotsFired];
 }
 
 
-// function to output result for each step
+// function outputs results for each step
 // step = number, gridIni = string; script = string; 
-// resultGrid = string; result = array
+// gridFin = string; result = array
 function output(step, gridIni, script, resultGrid, result){
 
-	let finalGrid = makeResultGrid(resultGrid);
+	let gridFin = makeResultString(resultGrid);
 
 	console.log('Step', step, '\n');
 	console.log(gridIni, '\n');
 	console.log(script, '\n');
-	console.log(finalGrid, '\n');
+	console.log(gridFin, '\n');
 	console.log(result[0], '(' + result[1] + ')', '\n');
 
 }
 
+// function takes a grid array and converts
+// it into a string for printing to output()
+function makeResultString(grid) {
 
-function makeResultGrid(grid) {
+  let storage = [];
+  let string = '';
 
-	let storage = [];
-	let string = '';
+    for (let j = 0; j < grid[0].length; j++) {
 
-	for (let i = 0; i < grid.length; i++){
-		for (let j = 0; j < grid[0].length; j++) {
-			string += grid[i][j];
-		}
-		storage.push(string);
-		string = "";
-	}
+      for (let i = 0; i < grid.length; i++){
+        string += grid[i][j];
+      }
 
-	console.log('storage = ', storage);
+      storage.push(string);
+      string = "";
+    };
 
-	let result = storage.toString();
-	console.log('result = ', result);
+  let result = storage.toString().split(',').join("\n");
 
-	return result.split(',').join("\n");
-
+  return result;
 }
 
 
-
 function makeStepArray(string) {
+
 	let strToArr = string.split(' ');
 	return strToArr;
 }
@@ -292,48 +279,74 @@ function makeScriptArray(string) {
 }
 
 
-function makeGridArray(string) {
+// function takes a string representing a grid
+// and formats it into a nested array with
+// x and y coordinates as defined in the problem.
+function makeGridArray(string){
 
-	// split string into an array of characters
-	let strToArr = string.split('');
+  // split string into an array of characters
+  let strToArr = string.split('');
 
-	// determine line count for grid based on '\n'
-	let lineCount =  string.split(/\r\n|\r|\n/).length;
+  // call gridDimensions to return array diemenions
+  let xy = gridDimensions(string);
 
-	let array = [];
-	let storage = [];
+  let xWidth = xy[0];
+  let yWidth = xy[1];
 
-	// recursive function to create grid of nested arrays
-	function recursive(string){
+  let storage = [];
+  let array = [];
 
-		// base case
-		if (string.length === 0) {
-			array.push(storage);
-		}
+  for (var i = 0; i < xWidth; i++){
+    for (var k = i; k < strToArr.length; k += (xWidth+1)){
+      storage.push(strToArr[k]);
+    }
+    array.push(storage);
+    storage = [];
+  }
 
-		// if character != '\n'
-		// push character into storage
-		// slice character off string, call recursive(string)
-		else if (string[0] !== '\n'){
-			storage.push(string[0]);
-			recursive(string.slice(1));
-		}
+  /* Nested for loops for checking format
+  for (var i = 0; i < xWidth; i++){
+    for (var j = 0; j < yWidth; j++){
+      console.log('array[',i,'][',j,'] =', array[i][j]);
+    }
+  }
+  */
 
-		// if character = '\n'
-		// push storage into array
-		// empty storage for next nested array
-		// slice '\n' off string, call recursive(string)
-		else {
-			array.push(storage);
-			storage = [];
-			recursive(string.slice(1));
-		}
-	}
-
-	recursive(strToArr);
-
-	return array;
-
-};
+  // return nested array
+  return array;
+}
 
 
+// function determines the x and y grid dimensions
+// based on a string input
+function gridDimensions(string){
+
+  // split string into an array of characters
+  let strToArr = string.split('');
+
+  // count number of /n or /r characters => depth of array (y)
+  let yLength =  string.split(/\r\n|\r|\n/).length;
+
+  // count number of characters before /n => width of array (x)
+  let xLength = 0;
+
+  // recursive function to determine width of array
+  function recursive(string){
+
+    // base case
+    if (string.length === 0) {
+      return xLength;
+    }
+
+    // if character != '\n'
+    else if (string[0] !== '\n'){
+      xLength += 1;
+      recursive(string.slice(1));
+    }
+  }
+
+  recursive(strToArr);
+
+  return [xLength, yLength];
+
+}
