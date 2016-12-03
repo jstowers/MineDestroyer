@@ -26,7 +26,8 @@ computer, follow these easy steps:
 
 	  	$ cd Coding
 
-6. 	Clone the MineDestroyer repository to your folder:
+6. 	Clone the MineDestroyer repository to your folder with the
+	git clone command and pasting the link you copied above:
 	
 	  	$ git clone https://github.com/jstowers/MineDestroyer
 
