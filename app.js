@@ -84,20 +84,38 @@ function main() {
 } // end function main
 
 
+// function returns the midpoint [x,y] of an n x m grid
+// where n and m are odd numbers
+function findGridMidpoint(grid) {
+
+	// grid[0].length => n (across)
+	let n = grid[0].length;
+
+	// grid.length => m (down)
+	let m = grid.length;
+
+	// midpoint of n
+	let nMid = Math.round(n/2) - 1;
+
+	// midpoint of m
+	let mMid = Math.round(m/2) - 1;
+
+	return [nMid,mMid];
+}
+
+
+
 function fireInTheHole(grid, pattern) {
 
-	// use the grid size (1x1, 3 x 3, etc.) to determine midpoint 
-	// of grid and place vessel
-	let gridMidPt = Math.round(grid.length/2) - 1;
-	let vesselLoc = [];
-	vesselLoc = [gridMidPt,gridMidPt];
-
-	// need to place ship in middle of grid
+	// place ship at middle of grid
+	let shipLoc = findGridMidpoint(grid);
+	console.log('shipLoc = ', shipLoc);
 
 
+	// destroy mine if offset === character
 
-	// 
 
+		// if destroy mine => character becomes 
 
 
 
