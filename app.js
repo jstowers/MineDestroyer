@@ -22,6 +22,7 @@ function main() {
 	var gridArray = makeGridArray(gridIni);
 
 	let moveCounter = 0;
+	let fireArray = [];
 
 	// loop through each step of scriptArray
 	for (var i = 0; i < scriptArray.length; i++){
@@ -41,6 +42,7 @@ function main() {
 			// can have multiple actions per step
 			let stepArray = makeStepArray(scriptArray[i]);
 
+			
 			// function to perform logic on each action
 			for (var j = 0; j < stepArray.length; j++){
 
@@ -49,7 +51,7 @@ function main() {
 
 				// if action is firing pattern
 				if (fireActions.includes(stepArray[j])){
-					fireInTheHole(gridArray, stepArray[j]);
+					fireArray = fireInTheHole(gridArray, stepArray[j]);
 					
 
 				}
@@ -73,7 +75,7 @@ function main() {
 		let result = ['pass', 1]
 
 		// function to output result for step
-		output(i+1, gridIni, scriptArray[i], '. * .', result);
+		output(i+1, gridIni, scriptArray[i], fireArray[0], result);
 
 
 		// if game not over, loop to next step
@@ -82,12 +84,16 @@ function main() {
 } // end function main
 
 
-/*
+/* DO NOT USE
 function gridSize(grid) {
 
+	// x increases going down
+	let gridDown = grid.length;
 
+	// y increases going across
+	let gridAcross = grid[0].length; 
 
-	return 
+	return [gridDown, gridAcross];
 }
 */
 
@@ -115,6 +121,24 @@ function findGridMidpoint(grid) {
 function getFiringPattern(pattern) {
 
 	let patterns = {};
+
+	/*
+	alpha	x.x
+			...
+			x.x
+
+	beta 	.x.
+			x.x
+			.x.
+
+	gamma	...
+			xxx
+			...
+
+	delta	.x.
+			.x.
+			.x.
+	*/
 
 	patterns.alpha = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
 	patterns.beta = [[-1, 0], [0, -1], [0, 1], [1, 0]];
@@ -178,6 +202,13 @@ function fireInTheHole(grid, pattern) {
 	// calculate shots fired
 	let shotsFired = offsets.length;
 
+	// Please note that the problem statement has x coordinates
+	// going across and y coordinates going down.
+	// But in looping through this nested array, the y coordinates
+	// go down and the x coordinates go across.
+	// To correct for this discrepancy, I switched the x and y in the 
+	// offsets conditionals so that we're comparing in the correct order.
+
 	// n => across (y)
 	let n = grid[0].length;
 
@@ -192,28 +223,14 @@ function fireInTheHole(grid, pattern) {
 	for (let i = 0; i < offsets.length; i++) {
 		for (let x = 0; x < m; x++){
 			for (let y = 0; y < n; y++){
-				console.log('x = ', x, ' y = ', y, ' grid[x][y] = ', grid[x][y]);
+				//console.log('x = ', x, ' y = ', y, ' grid[x][y] = ', grid[x][y]);
 				if(grid[x][y] !== '.' && offsets[i][0] === y && offsets[i][1] === x) {
-					console.log('We have a direct hit');
+					//console.log('We have a direct hit');
 					grid[x][y] = '.';
 				}
 			}
 		}
 	}
-
-	/*
-	for (let x = 0; x < n; x++){
-		for (let y = 0; y < m; y++){
-			for (let i = 0; i < offsets.length; i++){
-				console.log('grid[x][y] = ', grid[x][y]);
-				if(grid[x][y] !== '.' && offsets[i][0] === x && offsets[i][1] === y){
-					console.log('We have a direct hit');
-					grid[x][y] = '.';
-				}
-			}
-		}
-	}
-	*/
 
 	// return resultant grid + shotsFired
 	console.log('grid result = ', grid);
@@ -222,21 +239,44 @@ function fireInTheHole(grid, pattern) {
 }
 
 
-
-
-
 // function to output result for each step
 // step = number, gridIni = string; script = string; 
 // resultGrid = string; result = array
 function output(step, gridIni, script, resultGrid, result){
 
+	let finalGrid = makeResultGrid(resultGrid);
+
 	console.log('Step', step, '\n');
 	console.log(gridIni, '\n');
 	console.log(script, '\n');
-	console.log(resultGrid, '\n');
+	console.log(finalGrid, '\n');
 	console.log(result[0], '(' + result[1] + ')', '\n');
 
 }
+
+
+function makeResultGrid(grid) {
+
+	let storage = [];
+	let string = '';
+
+	for (let i = 0; i < grid.length; i++){
+		for (let j = 0; j < grid[0].length; j++) {
+			string += grid[i][j];
+		}
+		storage.push(string);
+		string = "";
+	}
+
+	console.log('storage = ', storage);
+
+	let result = storage.toString();
+	console.log('result = ', result);
+
+	return result.split(',').join("\n");
+
+}
+
 
 
 function makeStepArray(string) {
@@ -256,11 +296,9 @@ function makeGridArray(string) {
 
 	// split string into an array of characters
 	let strToArr = string.split('');
-	console.log('strToArr = ', strToArr);
 
 	// determine line count for grid based on '\n'
 	let lineCount =  string.split(/\r\n|\r|\n/).length;
-	console.log('lineCount = ', lineCount);
 
 	let array = [];
 	let storage = [];
