@@ -5,7 +5,7 @@
 
 ### Directions for Cloning this Repository
 
-	If you would like to put this repository on your
+If you would like to put this repository on your
 computer, follow these easy steps:
 
 1. 	Go to https://github.com/jstowers/MineDestroyer.
@@ -15,21 +15,20 @@ computer, follow these easy steps:
 3. 	Copy the HTTPS link to the clipboard.
 
 4. 	In a console window (like iTerm), create a new folder 
-   	in a directory of your choosing.
+   	in a directory of your choosing. For example, in your Documents
+   	directory, you could create a Coding folder:
 
-   	For example, you could create a Coding folder in your Documents directory:
+		$ cd Documents
 
-	  $ cd Documents
-
-	  $ mkdir Coding
+		$ mkdir Coding
 
 5. 	Go to your new folder:
 
-	  $ cd Coding
+	  	$ cd Coding
 
-6. 	Clone the MineDestroyer repository to your Coding folder:
+6. 	Clone the MineDestroyer repository to your folder:
 	
-	  $ git clone https://github.com/jstowers/MineDestroyer
+	  	$ git clone https://github.com/jstowers/MineDestroyer
 
 7. 	That's it.  Are you ready to enter the Starfleet Academy!
 
@@ -39,18 +38,18 @@ computer, follow these easy steps:
 1. 	After cloning this repository, check to make sure you 
    	have the necessary files:
 
-	  $ ls
+	  	$ ls
 
 2.  You should have the following files:
 
-	  app.js
-	  grid.txt
-	  script.txt
-	  README.md
+	  	a.	app.js
+	  	b.	grid.txt
+	  	c.	script.txt
+	  	d.	README.md
 
 3.	When you're ready to start your search and destroy mission, enter
 	the following command:
 
-	  $ node app.js grid.txt script.txt
+	  	$ node app.js grid.txt script.txt
 
 4.	GOOD LUCK!!
