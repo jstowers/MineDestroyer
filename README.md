@@ -75,9 +75,17 @@ Nested Array After:
 This will ensure that an (x,y) coordinate pair is equal
 to an (i, j) pair in the code.
 
-				i (x) -->
-             	0    1   2
+				 i (x) -->
+             	 0   1   2
              	----------
-   			0 |  A   B   C
+   			0 |	 A   B   C
    	j (y)	1 |  D   E   F
 			2 |  G   H   I
+
+------------------------------------------------------------------------
+
+2:05 pm => Completed refactor of code and coordinates work fine.  Also 
+refactored function makeResultString() to convert the grid into the
+proper string format for printing to output.
+
+------------------------------------------------------------------------
