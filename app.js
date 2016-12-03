@@ -9,6 +9,8 @@ var scriptFile = process.argv[3];
 // Since both files are small, I chose the simpler synchronous
 // calls instead of asynchronous.
 let gridIni = fs.readFileSync(fieldFile, 'utf-8');
+console.log('gridIni = ', gridIni);
+
 let scriptIni = fs.readFileSync(scriptFile, 'utf-8');
 
 // Call function main()
@@ -190,6 +192,8 @@ function fireInTheHole(grid, pattern) {
 	// place ship at middle of grid
 	let shipLoc = findGridMidpoint(grid);
 	console.log('shipLoc = ', shipLoc);
+	console.log('shipLoc[0] = ', shipLoc[0]);
+	console.log('gridLoc = ', grid[shipLoc[0]][shipLoc[1]]);
 
 	// return array of offset coordinates for fire pattern
 	let firePattern = getFiringPattern(pattern);
@@ -204,21 +208,37 @@ function fireInTheHole(grid, pattern) {
 
 	// Please note that the problem statement has x coordinates
 	// going across and y coordinates going down.
-	// But in looping through this nested array, the y coordinates
+	//
+	// But in looping through the nested array below, the y coordinates
 	// go down and the x coordinates go across.
-	// To correct for this discrepancy, I switched the x and y in the 
-	// offsets conditionals so that we're comparing in the correct order.
+	//
+	// To correct for this discrepancy, I switched, in the if statement, 
+	// the x and y values for the offsets so that the coordinates match
+	// the problem statement.
 
-	// n => across (y)
+	// n => across (x)
 	let n = grid[0].length;
 
-	// m => down (x)
+	// m => down (y)
 	let m = grid.length;
+
+
+	console.log('n = ', n, "  m = ", m);
 
 	// loop through grid and see if mines are located 
 	// in the offset coordinates
 	// a mine is a character a-z, A-Z that does not equal '.'
 	// if mine destroyed, change character to '.'
+
+	for (let i = 0; i < m; i++){
+		for (let j = 0; j < n; j++){
+			console.log('[i][j] = [ ', i, ', ', j, ' ]  ',
+						'grid[i][j] = ', grid[i][j]);
+		}
+	}
+
+
+	/* WORKING CODE!
 
 	for (let i = 0; i < offsets.length; i++) {
 		for (let x = 0; x < m; x++){
@@ -232,9 +252,20 @@ function fireInTheHole(grid, pattern) {
 		}
 	}
 
+	*/
+
 	// return resultant grid + shotsFired
 	console.log('grid result = ', grid);
 	console.log('shotsFired = ', shotsFired);
+
+	// call function to check current location to see if mine exists
+
+
+	// check resultant grid for number of mines remaining
+
+		// if all mines blown away, then win
+
+
 	return [grid, shotsFired];
 }
 
@@ -296,9 +327,11 @@ function makeGridArray(string) {
 
 	// split string into an array of characters
 	let strToArr = string.split('');
+	console.log('strToArr = ', strToArr)
 
 	// determine line count for grid based on '\n'
 	let lineCount =  string.split(/\r\n|\r|\n/).length;
+	console.log('lineCount = ', lineCount);
 
 	let array = [];
 	let storage = [];
