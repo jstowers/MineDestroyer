@@ -21,7 +21,6 @@ function main() {
 
 	var gridArray = makeGridArray(gridIni);
 
-	let fireCounter = 0;
 	let moveCounter = 0;
 
 	// loop through each step of scriptArray
@@ -50,7 +49,6 @@ function main() {
 
 				// if action is firing pattern
 				if (fireActions.includes(stepArray[j])){
-					fireCounter += 1;
 					fireInTheHole(gridArray, stepArray[j]);
 					
 
@@ -82,6 +80,16 @@ function main() {
 
 	} // end scriptArray for loop
 } // end function main
+
+
+/*
+function gridSize(grid) {
+
+
+
+	return 
+}
+*/
 
 
 // function returns the midpoint [x,y] of an n x m grid,
@@ -128,11 +136,9 @@ function offsetToCords(grid, origin, offsets) {
 	// determine n x m grid lengths to check sums of coordinates
 	// n => across
 	let n = grid[0].length;
-	console.log('n =', n);
 
 	// m => down
 	let m = grid.length;
-	console.log('m =', m);
 
 	// define cordStorage array
 	let offsetCordStorage = [];
@@ -155,6 +161,8 @@ function offsetToCords(grid, origin, offsets) {
 // function executes a torpedo fire command
 function fireInTheHole(grid, pattern) {
 
+	console.log('grid = ', grid);
+
 	// place ship at middle of grid
 	let shipLoc = findGridMidpoint(grid);
 	console.log('shipLoc = ', shipLoc);
@@ -167,20 +175,50 @@ function fireInTheHole(grid, pattern) {
 	let offsets = offsetToCords(grid, shipLoc, firePattern);
 	console.log('offsets = ', offsets);
 
+	// calculate shots fired
+	let shotsFired = offsets.length;
+
+	// n => across (y)
+	let n = grid[0].length;
+
+	// m => down (x)
+	let m = grid.length;
 
 	// loop through grid and see if mines are located 
 	// in the offset coordinates
-	
+	// a mine is a character a-z, A-Z that does not equal '.'
+	// if mine destroyed, change character to '.'
 
+	for (let i = 0; i < offsets.length; i++) {
+		for (let x = 0; x < m; x++){
+			for (let y = 0; y < n; y++){
+				console.log('x = ', x, ' y = ', y, ' grid[x][y] = ', grid[x][y]);
+				if(grid[x][y] !== '.' && offsets[i][0] === y && offsets[i][1] === x) {
+					console.log('We have a direct hit');
+					grid[x][y] = '.';
+				}
+			}
+		}
+	}
 
+	/*
+	for (let x = 0; x < n; x++){
+		for (let y = 0; y < m; y++){
+			for (let i = 0; i < offsets.length; i++){
+				console.log('grid[x][y] = ', grid[x][y]);
+				if(grid[x][y] !== '.' && offsets[i][0] === x && offsets[i][1] === y){
+					console.log('We have a direct hit');
+					grid[x][y] = '.';
+				}
+			}
+		}
+	}
+	*/
 
-		// a mine is a character or !== '.'
-
-		// destroy mine if offset === character
-
-		// if destroy mine => character (coordinate) becomes '.'
-
-	// return a resultant grid (??)
+	// return resultant grid + shotsFired
+	console.log('grid result = ', grid);
+	console.log('shotsFired = ', shotsFired);
+	return [grid, shotsFired];
 }
 
 
