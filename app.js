@@ -20,11 +20,11 @@ function main() {
 
 	// create array for each step in script file
 	var scriptArray = makeScriptArray(scriptIni);
-
 	var gridArray = makeGridArray(gridIni);
 
 	let moveCounter = 0;
 	let fireArray = [];
+	let moveArray = [];
 
 	// loop through each step of scriptArray
 	for (var i = 0; i < scriptArray.length; i++){
@@ -60,7 +60,7 @@ function main() {
 				// if action is move
 				else if (moveActions.includes(stepArray[j])){
 					moveCounter += 1;
-					//moveTheShip(gridArray, stepArray[j]);
+					moveArray = moveTheShip(gridArray, stepArray[j]);
 				
 				} else {
 				// exit game if incorrect action	
@@ -77,13 +77,73 @@ function main() {
 		let result = ['pass', 1]
 
 		// function to output result for step
-		output(i+1, gridIni, scriptArray[i], fireArray[0], result);
+		output(i+1, gridIni, scriptArray[i], moveArray[0], result);
 
 
 		// if game not over, loop to next step
 
 	} // end scriptArray for loop
 } // end function main
+
+
+function moveTheShip(grid, direction) {
+	console.log('direction = ', direction);
+
+	// place ship at middle of grid
+	let shipLoc = findGridMidpoint(grid);
+	console.log('shipLoc before = ', shipLoc);
+
+	/* NOTE ON CHANGE IN MOVE DIRECTIONS
+
+		In the problem statement, the top-left corner of the grid
+		is given as (0,0,0).  Based on the mine locations given
+		in the problem statement, x coordinates increase 
+		from left to right and y coordinates increase from top to bottom.
+
+		This convention is customary for an X/Y plane in three-dimensional
+		space.
+
+		Also in the problem statement, the direction moves are given as:
+
+			north		increment y-coordinate of ship
+			south		decrement y-coordinate of ship
+			east		increment x-coordinate of ship
+			west		decrement x-coordinate of ship
+
+		In the provided examples, I found a discrepancy in the direction
+		changes for north and south.  For north, the ship moves up the grid
+		instead of down.  This is the conventional direction of north on maps.
+		And for south, the ship moves down the grid.  These movements, however, 
+		conflict with the layout of the grid in the problem statement.
+
+		To ensure consistency with the provided examples, I'm changing the
+		north and south direction changes as follows:
+
+			north		decrement y-coordinate of ship
+			south		increment y-coordinate of ship
+	
+		The east and west coordinates remain the same.
+	*/
+
+	let directions = {};
+	directions.north = [0, -1];
+	directions.south = [0, 1];
+	directions.east = [1, 0];
+	directions.west = [-1, 0];
+
+	for (key in directions){
+		if (direction === key){
+			shipLoc[0] += directions[key][0];
+			shipLoc[1] += directions[key][1];
+		}
+	}
+
+	console.log('shipLoc after = ', shipLoc);
+
+	return [grid, shipLoc];
+}
+
+
 
 
 
@@ -245,6 +305,8 @@ function output(step, gridIni, script, resultGrid, result){
 // function takes a grid array and converts
 // it into a string for printing to output()
 function makeResultString(grid) {
+
+  console.log('grid in ResultString =', grid);
 
   let storage = [];
   let string = '';
