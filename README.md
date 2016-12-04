@@ -59,7 +59,8 @@ computer, follow these easy steps:
 
 ### Journal
 
-Thursday, 12/1/2016
+
+*Thursday, 12/1/2016*
 
 10:00 pm => I spent my evening programming the basic command line code
 to read in the grid and script files.  I researched using callbacks and
@@ -67,7 +68,7 @@ promises for the fs.read method, but decided that since the files were
 small, a straightforward synchronous function was more efficient.
 
 
-Friday, 12/2/2016
+*Friday, 12/2/2016*
 
 10:00 am => Created a basic design outline for my program, considering 
 the different functions and logic structures.  Based on the grid
@@ -87,8 +88,7 @@ I divided the problem into the following:
 and the firing functionality.
 
 
-
-Saturday, 12/3/2016
+*Saturday, 12/3/2016*
 
 10:05 am => Realized last night that when looping through a 
 nested array with two for loops the x and y coordinates were 
