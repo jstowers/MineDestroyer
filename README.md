@@ -190,9 +190,49 @@ Remaining work to complete:
 ----------------------------------------------------------------------------
 
 
-* Sunday, 12/4/2016 *
+*Sunday, 12/4/2016*
 
-2:00 am => Complete depth change adjustment of mine characters.
+2:00 am => Complete depth change adjustment of mine characters.  I decided to
+you an object structure with a depth as a key and the character as a value.
+For instance 1:'a'. Accessing an object with 'a':1 was a bit more difficult
+since I was wanting to change a character based on the change in depth.
+
+I also considered correlating character and depth to ASCII values for
+each character:
+
+```` javascript
+
+		let curVal = 'Z'
+		let curValNum = curVal.charCodeAt()
+		console.log('Z = ', curValNum); // => 90
+
+		// subtract one from current ASCII value
+		let newVal = String.fromCharCode(curValNum-1);
+
+		// return the new character
+		console.log('newVal = ', newVal) // => 'Y'
+		
+````
+
+Although this seemed a bit more intensive at the outset,
+after accessing object properties in nested for loops, the ASCII method 
+may have been more efficient.
+
+8:30 am => Thought of another method to process the depth change 
+adjustment.
+
+I could create an array of just grid coordinates that contain a
+character.  I pass this array into my depthAdjust() function, 
+change the characters for those coordinates, return the 
+new characters in a result array, and then insert them into the grid.
+
+The result array could look like: [[[1,1], 'b'], [[2,3], '*'], [[5,5], 'Z']].  
+I will consider this refactor if time permits.
+
+12:00 pm => Prepare scoring functions.
+
+
+
 
 
 
