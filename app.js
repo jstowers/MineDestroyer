@@ -9,8 +9,7 @@ var scriptFile = process.argv[3];
 // Since both files are small, I chose the simpler synchronous
 // calls instead of asynchronous.
 let gridIni = fs.readFileSync(fieldFile, 'utf-8');
-console.log('gridIni = ', gridIni);
-
+console.log('gridIni' + '\n' + gridIni + '\n');
 let scriptIni = fs.readFileSync(scriptFile, 'utf-8');
 
 // Call function main()
@@ -20,11 +19,11 @@ function main() {
 
 	// create array for each step in script file
 	var scriptArray = makeScriptArray(scriptIni);
-
 	var gridArray = makeGridArray(gridIni);
 
 	let moveCounter = 0;
 	let fireArray = [];
+	let moveArray = [];
 
 	// loop through each step of scriptArray
 	for (var i = 0; i < scriptArray.length; i++){
@@ -34,8 +33,8 @@ function main() {
 		// print result and go to next line
 		if (scriptArray[i] === ''){
 			console.log('inside a blank line');
-			// !!!
-			// call result();
+			// need to call function dropKM()
+			// print result
 		}
 
 		// script line contains move, firing pattern, or both
@@ -54,14 +53,13 @@ function main() {
 				// if action is firing pattern
 				if (fireActions.includes(stepArray[j])){
 					fireArray = fireInTheHole(gridArray, stepArray[j]);
-					
-
+				
 				}
 				// if action is move
 				else if (moveActions.includes(stepArray[j])){
 					moveCounter += 1;
-					//moveTheShip(gridArray, stepArray[j]);
-				
+					moveArray = moveTheShip(gridArray, stepArray[j]);
+					
 				} else {
 				// exit game if incorrect action	
 					console.log('ERROR: '+ stepArray[j] + 
@@ -70,6 +68,8 @@ function main() {
 				}
 
 			} // end stepArray for loop
+
+			depthAdjust(gridArray, -1);
 		}
 
 		// function to calculate result after all actions
@@ -77,13 +77,279 @@ function main() {
 		let result = ['pass', 1]
 
 		// function to output result for step
-		output(i+1, gridIni, scriptArray[i], fireArray[0], result);
+		output(i+1, gridIni, scriptArray[i], moveArray[0], result);
 
 
 		// if game not over, loop to next step
 
 	} // end scriptArray for loop
 } // end function main
+
+
+function moveTheShip(grid, direction) {
+
+	// place ship at middle of grid
+	let shipLoc = findGridMidpoint(grid);
+	console.log('shipLoc before = ', shipLoc);
+
+	/* NOTE ON CHANGE IN NORTH/SOUTH MOVE DIRECTIONS
+
+		In the problem statement, the top-left corner of the grid
+		is given as (0,0,0).  Based on the mine locations given
+		in the problem statement, x coordinates increase 
+		from left to right and y coordinates increase from top to bottom.
+
+		This convention is customary for an x/y plane in three-dimensional
+		space.
+
+		Also in the problem statement, the direction moves are given as:
+
+			north		increment y-coordinate of ship
+			south		decrement y-coordinate of ship
+			east		increment x-coordinate of ship
+			west		decrement x-coordinate of ship
+
+		In the provided examples, I found a discrepancy in the direction
+		changes for north and south.  For north, the ship moves up the grid
+		instead of down.  This is the conventional direction of north on maps.
+		And for south, the ship moves down the grid.  These movements, however, 
+		conflict with the layout of the grid in the problem statement.
+
+		To ensure consistency with the provided examples, I'm changing the
+		north and south direction moves as follows:
+
+			north		decrement y-coordinate of ship
+			south		increment y-coordinate of ship
+	
+		The east and west coordinates remain the same.
+	*/
+
+	let directions = {};
+	directions.north = [0, -1];
+	directions.south = [0, 1];
+	directions.east = [1, 0];
+	directions.west = [-1, 0];
+
+	for (key in directions){
+		if (direction === key){
+			shipLoc[0] += directions[key][0];
+			shipLoc[1] += directions[key][1];
+		}
+	}
+
+	console.log('shipLoc after = ', shipLoc);
+
+	if (direction === 'north' || direction === 'south'){
+
+		resizeNS(grid,shipLoc,direction);
+
+	} else resizeEW(grid,shipLoc,direction);
+
+	return [grid, shipLoc];
+}
+
+
+// function resizes grid based on a move north
+// or south; returns a string for output
+function resizeNS(grid, shipLoc, direction) {
+
+	let x = shipLoc[0];
+	let y = shipLoc[1];
+	console.log('x =', x, '  y =', y);
+
+	// n (across) => x axis
+	let n = grid.length;
+
+	// m (down) => y axis
+	let m = grid[0].length;
+	console.log('m = ', m);
+
+	let yAbove = y - 0;
+	console.log('yAbove =', yAbove);
+	let yBelow = m - y - 1;
+	console.log('yBelow =', yBelow);
+
+	let yDiff = yBelow - yAbove;
+	console.log('yDiff =', yDiff)
+
+	let stringAdd = '';
+
+	for (var k = 0; k < Math.abs(yDiff); k++){
+		for (var i = 0; i < n; i++){
+			stringAdd += '.'
+		}
+		stringAdd += '\n';
+	}
+
+	let tempString = makeResultString(grid);
+	let result = '';
+
+	if (yDiff > 0) {
+		result = stringAdd + tempString;
+	} else {
+		result = tempString + '\n' + stringAdd;
+	}
+
+	console.log('result = ' + '\n' + result);
+
+	return result;
+}
+
+
+// function resizes grid based on a move east
+// or west; returns a string for output
+function resizeEW(grid, shipLoc, direction) {
+
+	let x = shipLoc[0];
+	let y = shipLoc[1];
+	console.log('x =', x, '  y =', y);
+
+	// n (across) => x axis
+	let n = grid.length;
+
+	// m (down) => y axis
+	let m = grid[0].length;
+	console.log('m = ', m);
+
+	let xRight = n - x - 1;
+	console.log('xRight =', xRight);
+	let xLeft = x - 0;
+	console.log('xLeft =', xLeft);
+
+	let xDiff = xRight - xLeft;
+	console.log('xDiff =', xDiff);
+
+	let tempString = makeResultString(grid);
+	let strToArr = tempString.split('\n');
+	console.log('strToArr = ', strToArr);
+
+	let string = '';
+
+	// create basic string based on number 
+	// of additional columns
+	for (var k = 0; k < Math.abs(xDiff); k++) {
+		string += '.';
+	}
+	console.log('string = ', string);
+
+	let resultString = '';
+
+	if (xDiff > 0){
+		for (var i = 0; i < strToArr.length; i++){
+			resultString = string + strToArr[i];
+			strToArr[i] = resultString;
+		}
+	} else {
+		for (var i = 0; i < strToArr.length; i++){
+			strToArr[i] += string;
+		}
+	}
+
+	let result = strToArr.toString().split(',').join("\n");
+	console.log('result = ' + '\n' + result);
+
+	return result;
+}
+
+
+function depthAdjust(grid, depth){
+  
+  let depthChart = {
+  	1:'a',
+  	2:'b',
+  	3:'c',
+  	4:'d',
+  	5:'e',
+  	6:'f',
+  	7:'g',
+  	8:'h',
+  	9:'i',
+  	10:'j',
+  	11:'k',
+  	12:'l',
+  	13:'m',
+  	14:'n',
+  	15:'o',
+  	16:'p',
+  	17:'q',
+  	18:'r',
+  	19:'s',
+  	20:'t',
+  	21:'u',
+  	22:'v',
+  	23:'w',
+  	24:'x',
+  	25:'y',
+  	26:'z',
+  	27:'A',
+  	28:'B',
+  	29:'C',
+  	30:'D',
+  	31:'E',
+  	32:'F',
+  	33:'G',
+  	34:'H',
+  	35:'I',
+  	36:'J',
+  	37:'K',
+  	38:'L',
+  	39:'M',
+  	40:'N',
+  	41:'O',
+  	42:'P',
+  	43:'Q',
+  	44:'R',
+  	45:'S',
+  	46:'T',
+  	47:'U',
+  	48:'V',
+  	49:'W',
+  	50:'X',
+  	51:'Y',
+  	52:'Z'
+  }
+
+  let newDepth = -depth;
+  console.log('newDepth = ', newDepth)
+  
+  for (var i = 0; i < grid.length; i++){
+    for (var j = 0; j < grid[0].length; j++){
+      if (grid[i][j] !== '.' && grid[i][j] !== '*'){
+        let currDepth = '';
+        for (var key in depthChart){
+          if(grid[i][j] === depthChart[key]){
+            //console.log('char = ', grid[i][j])
+            currDepth = key;
+            //console.log('currDepth = ', currDepth)
+          }
+        }
+        
+        //console.log('currDepth after = ', currDepth);
+        //console.log('newDepth = ', newDepth);
+        
+        if(Number(currDepth) === newDepth){
+          console.log('newDepth = ', newDepth);
+          grid[i][j] = '*';
+        }
+        else{
+          let depthAdjust = -1 + Number(currDepth);
+          grid[i][j] = depthChart[depthAdjust];
+        }
+        console.log('grid[' + i + '][' + j + '] = ' + grid[i][j] );
+        currDepth = '';
+      }
+    }
+  }
+  
+  // return updated grid
+  return grid
+}
+
+
+
+
+
+
 
 
 
@@ -246,6 +512,8 @@ function output(step, gridIni, script, resultGrid, result){
 // it into a string for printing to output()
 function makeResultString(grid) {
 
+  //console.log('grid in ResultString =', grid);
+
   let storage = [];
   let string = '';
 
@@ -313,6 +581,7 @@ function makeGridArray(string){
   */
 
   // return nested array
+  console.log('makeGridArray =', array)
   return array;
 }
 
@@ -350,3 +619,18 @@ function gridDimensions(string){
   return [xLength, yLength];
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
