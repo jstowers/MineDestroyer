@@ -33,8 +33,8 @@ function main() {
 		// print result and go to next line
 		if (scriptArray[i] === ''){
 			console.log('inside a blank line');
-			// !!!
-			// call result();
+			// need to call function dropKM()
+			// print result
 		}
 
 		// script line contains move, firing pattern, or both
@@ -53,14 +53,13 @@ function main() {
 				// if action is firing pattern
 				if (fireActions.includes(stepArray[j])){
 					fireArray = fireInTheHole(gridArray, stepArray[j]);
-					
-
+				
 				}
 				// if action is move
 				else if (moveActions.includes(stepArray[j])){
 					moveCounter += 1;
 					moveArray = moveTheShip(gridArray, stepArray[j]);
-				
+					
 				} else {
 				// exit game if incorrect action	
 					console.log('ERROR: '+ stepArray[j] + 
@@ -69,6 +68,8 @@ function main() {
 				}
 
 			} // end stepArray for loop
+
+			depthAdjust(gridArray, -1);
 		}
 
 		// function to calculate result after all actions
@@ -249,6 +250,107 @@ function resizeEW(grid, shipLoc, direction) {
 
 	return result;
 }
+
+
+function depthAdjust(grid, depth){
+  
+  let depthChart = {
+  	1:'a',
+  	2:'b',
+  	3:'c',
+  	4:'d',
+  	5:'e',
+  	6:'f',
+  	7:'g',
+  	8:'h',
+  	9:'i',
+  	10:'j',
+  	11:'k',
+  	12:'l',
+  	13:'m',
+  	14:'n',
+  	15:'o',
+  	16:'p',
+  	17:'q',
+  	18:'r',
+  	19:'s',
+  	20:'t',
+  	21:'u',
+  	22:'v',
+  	23:'w',
+  	24:'x',
+  	25:'y',
+  	26:'z',
+  	27:'A',
+  	28:'B',
+  	29:'C',
+  	30:'D',
+  	31:'E',
+  	32:'F',
+  	33:'G',
+  	34:'H',
+  	35:'I',
+  	36:'J',
+  	37:'K',
+  	38:'L',
+  	39:'M',
+  	40:'N',
+  	41:'O',
+  	42:'P',
+  	43:'Q',
+  	44:'R',
+  	45:'S',
+  	46:'T',
+  	47:'U',
+  	48:'V',
+  	49:'W',
+  	50:'X',
+  	51:'Y',
+  	52:'Z'
+  }
+
+  let newDepth = -depth;
+  console.log('newDepth = ', newDepth)
+  
+  for (var i = 0; i < grid.length; i++){
+    for (var j = 0; j < grid[0].length; j++){
+      if (grid[i][j] !== '.' && grid[i][j] !== '*'){
+        let currDepth = '';
+        for (var key in depthChart){
+          if(grid[i][j] === depthChart[key]){
+            //console.log('char = ', grid[i][j])
+            currDepth = key;
+            //console.log('currDepth = ', currDepth)
+          }
+        }
+        
+        //console.log('currDepth after = ', currDepth);
+        //console.log('newDepth = ', newDepth);
+        
+        if(Number(currDepth) === newDepth){
+          console.log('newDepth = ', newDepth);
+          grid[i][j] = '*';
+        }
+        else{
+          let depthAdjust = -1 + Number(currDepth);
+          grid[i][j] = depthChart[depthAdjust];
+        }
+        console.log('grid[' + i + '][' + j + '] = ' + grid[i][j] );
+        currDepth = '';
+      }
+    }
+  }
+  
+  // return updated grid
+  return grid
+}
+
+
+
+
+
+
+
 
 
 // function returns the midpoint [x,y] of an n x m grid,
@@ -479,6 +581,7 @@ function makeGridArray(string){
   */
 
   // return nested array
+  console.log('makeGridArray =', array)
   return array;
 }
 
@@ -516,3 +619,18 @@ function gridDimensions(string){
   return [xLength, yLength];
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

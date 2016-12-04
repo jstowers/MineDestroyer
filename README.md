@@ -169,12 +169,13 @@ into resized arrays.
 
 --------------------------------------------------------------------------
 
-11:00 pm => Completed resizeEW() function and tested functionality.
-Resize N/S and E/W complete.
+11:00 pm => Completed resizeEW() and tested functionality.
+Basic resize functionality N/S and E/W complete.  Need to trim
+extra columns/rows of empty space.
 
 Remaining work to complete:
 
-	1.	Depth change of characters
+	1.	Depth change of mine characters
 
 	2.	Scoring - 4 scenarios; calculate # mines destroyed
 
@@ -182,9 +183,16 @@ Remaining work to complete:
 
 	4.	Fix output
 
-	5.	Refactor main()
+	5.	Fix resize to trim extra columns of empty space. See Ex. 2, step 4.
+
+	6.	Refactor main()
+
+----------------------------------------------------------------------------
 
 
+* Sunday, 12/4/2016 *
+
+2:00 am => Complete depth change adjustment of mine characters.
 
 
 
