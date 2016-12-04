@@ -9,8 +9,7 @@ var scriptFile = process.argv[3];
 // Since both files are small, I chose the simpler synchronous
 // calls instead of asynchronous.
 let gridIni = fs.readFileSync(fieldFile, 'utf-8');
-console.log('gridIni = ', gridIni);
-
+console.log('gridIni' + '\n' + gridIni + '\n');
 let scriptIni = fs.readFileSync(scriptFile, 'utf-8');
 
 // Call function main()
@@ -87,7 +86,6 @@ function main() {
 
 
 function moveTheShip(grid, direction) {
-	console.log('direction = ', direction);
 
 	// place ship at middle of grid
 	let shipLoc = findGridMidpoint(grid);
@@ -100,7 +98,7 @@ function moveTheShip(grid, direction) {
 		in the problem statement, x coordinates increase 
 		from left to right and y coordinates increase from top to bottom.
 
-		This convention is customary for an X/Y plane in three-dimensional
+		This convention is customary for an x/y plane in three-dimensional
 		space.
 
 		Also in the problem statement, the direction moves are given as:
@@ -117,7 +115,7 @@ function moveTheShip(grid, direction) {
 		conflict with the layout of the grid in the problem statement.
 
 		To ensure consistency with the provided examples, I'm changing the
-		north and south direction changes as follows:
+		north and south direction moves as follows:
 
 			north		decrement y-coordinate of ship
 			south		increment y-coordinate of ship
@@ -140,10 +138,60 @@ function moveTheShip(grid, direction) {
 
 	console.log('shipLoc after = ', shipLoc);
 
+	if (direction === 'north' || direction === 'south'){
+
+		resizeNS(grid,shipLoc,direction);
+
+	} else resizeEW(grid,shipLoc,direction);
+
 	return [grid, shipLoc];
 }
 
+// function resizes grid based on a move north
+// or south; returns a string for output
+function resizeNS(grid, shipLoc, direction) {
 
+	let x = shipLoc[0];
+	let y = shipLoc[1];
+	console.log('x =', x, '  y =', y);
+
+	// n (across) => x axis
+	let n = grid.length;
+
+	// m (down) => y axis
+	let m = grid[0].length;
+	console.log('m = ', m);
+
+	let yAbove = y - 0;
+	console.log('yAbove =', yAbove);
+	let yBelow = m - y - 1;
+	console.log('yBelow =', yBelow);
+
+	let yDiff = yBelow - yAbove;
+	console.log('yDiff =', yDiff)
+
+	let stringAdd = '';
+
+	for (var k = 0; k < Math.abs(yDiff); k++){
+		for (var i = 0; i < n; i++){
+			stringAdd += '.'
+		}
+		stringAdd += '\n';
+	}
+
+	let tempString = makeResultString(grid);
+	let result = '';
+
+	if (yDiff > 0) {
+		result = stringAdd + tempString;
+	} else {
+		result = tempString + '\n' + stringAdd;
+	}
+
+	console.log('result = ' + '\n' + result);
+
+	return result;
+}
 
 
 
