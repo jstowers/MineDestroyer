@@ -90,3 +90,44 @@ refactored function makeResultString() to convert the grid into the
 proper string format for printing to output.
 
 ------------------------------------------------------------------------
+
+4:00 pm =>  NOTE ON CHANGE IN NORTH/SOUTH MOVE DIRECTIONS
+
+In the problem statement, the top-left corner of the grid
+is given as (0,0,0).  Based on the mine locations given
+in this statement, x coordinates increase from left to right 
+and y coordinates increase from top to bottom.
+
+This convention is customary for an x/y plane in three-dimensional
+space.
+
+Also in the problem statement, the direction moves are given as:
+
+	north		increment y-coordinate of ship
+	south		decrement y-coordinate of ship
+	east		increment x-coordinate of ship
+	west		decrement x-coordinate of ship
+
+In the provided examples, I found a discrepancy in the direction
+changes for north and south.  For north, the ship moves up the grid
+instead of down.  This is the conventional direction of north on maps.
+And for south, the ship moves down the grid.  These movements, however, 
+conflict with the layout of the grid in the problem statement.
+
+To ensure consistency with the provided examples, I'm changing the
+north and south direction moves as follows:
+
+	north		decrement y-coordinate of ship
+	south		increment y-coordinate of ship
+
+The east and west coordinates remain the same.
+
+-------------------------------------------------------------------------
+
+
+
+
+
+
+
+
