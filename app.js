@@ -147,6 +147,7 @@ function moveTheShip(grid, direction) {
 	return [grid, shipLoc];
 }
 
+
 // function resizes grid based on a move north
 // or south; returns a string for output
 function resizeNS(grid, shipLoc, direction) {
@@ -193,6 +194,61 @@ function resizeNS(grid, shipLoc, direction) {
 	return result;
 }
 
+
+// function resizes grid based on a move east
+// or west; returns a string for output
+function resizeEW(grid, shipLoc, direction) {
+
+	let x = shipLoc[0];
+	let y = shipLoc[1];
+	console.log('x =', x, '  y =', y);
+
+	// n (across) => x axis
+	let n = grid.length;
+
+	// m (down) => y axis
+	let m = grid[0].length;
+	console.log('m = ', m);
+
+	let xRight = n - x - 1;
+	console.log('xRight =', xRight);
+	let xLeft = x - 0;
+	console.log('xLeft =', xLeft);
+
+	let xDiff = xRight - xLeft;
+	console.log('xDiff =', xDiff);
+
+	let tempString = makeResultString(grid);
+	let strToArr = tempString.split('\n');
+	console.log('strToArr = ', strToArr);
+
+	let string = '';
+
+	// create basic string based on number 
+	// of additional columns
+	for (var k = 0; k < Math.abs(xDiff); k++) {
+		string += '.';
+	}
+	console.log('string = ', string);
+
+	let resultString = '';
+
+	if (xDiff > 0){
+		for (var i = 0; i < strToArr.length; i++){
+			resultString = string + strToArr[i];
+			strToArr[i] = resultString;
+		}
+	} else {
+		for (var i = 0; i < strToArr.length; i++){
+			strToArr[i] += string;
+		}
+	}
+
+	let result = strToArr.toString().split(',').join("\n");
+	console.log('result = ' + '\n' + result);
+
+	return result;
+}
 
 
 // function returns the midpoint [x,y] of an n x m grid,
@@ -354,7 +410,7 @@ function output(step, gridIni, script, resultGrid, result){
 // it into a string for printing to output()
 function makeResultString(grid) {
 
-  console.log('grid in ResultString =', grid);
+  //console.log('grid in ResultString =', grid);
 
   let storage = [];
   let string = '';

@@ -59,13 +59,44 @@ computer, follow these easy steps:
 
 ### Journal
 
+Thursday, 12/1/2016
+
+10:00 pm => I spent my evening programming the basic command line code
+to read in the grid and script files.  I researched using callbacks and
+promises for the fs.read method, but decided that since the files were
+small, a straightforward synchronous function was more efficient.
+
+
+Friday, 12/2/2016
+
+10:00 am => Created a basic design outline for my program, considering 
+the different functions and logic structures.  Based on the grid
+structure, I decided to use nested arrays with for loops.  This allows
+for straightforward manipulation of array elements, including firing
+at the mines, moving locations, and changing depth.
+
+
+I divided the problem into the following:
+
+	1.	main() - basic program flow, stepping through the script file
+	2.	parsing input files and creating grid
+	3.  logic - fire, move, resize, pass over mine
+	4.	output - print results in requested format
+
+4:00 pm => Worked in the afternoon on looping through the grid structure
+and the firing functionality.
+
+
+
 Saturday, 12/3/2016
 
-10:05 am => Realized that when looping through a nested array with two
-for loops that the x and y coordinates are switched from the problem
-statement.  To ensure consistency throughout the program, going to try
-and refactor the recursion function that creates a grid into the proper
-format for looping.
+10:05 am => Realized last night that when looping through a 
+nested array with two for loops the x and y coordinates were 
+switched from the problem statement.  
+
+To ensure consistency throughout the program, going to try
+and refactor the recursion function that creates a grid into the 
+proper format for looping.
 
 Nested Array Before:
 [[A,B,C], [D,E,F], [G,H,I]]
@@ -123,6 +154,36 @@ north and south direction moves as follows:
 The east and west coordinates remain the same.
 
 -------------------------------------------------------------------------
+
+5:00 pm => In working to resize the array, I initially tried to add rows
+for a N/S change by manipulating the grid array structure.  This proved
+unwieldy.  Realizing that the resized array would be output as a 
+string initially and not requiring array computations, I switched my
+focus to building the resize array as a string.  This proved much easier.
+
+I decided to separate the N/S and E/W resize functions for ease of 
+design.
+
+With the function makeGridArray(), I can easily convert these strings
+into resized arrays.
+
+--------------------------------------------------------------------------
+
+11:00 pm => Completed resizeEW() function and tested functionality.
+Resize N/S and E/W complete.
+
+Remaining work to complete:
+
+	1.	Depth change of characters
+
+	2.	Scoring - 4 scenarios; calculate # mines destroyed
+
+	3.	Make runtime dynamic with script file loop
+
+	4.	Fix output
+
+	5.	Refactor main()
+
 
 
 
