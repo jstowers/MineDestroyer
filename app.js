@@ -91,7 +91,7 @@ function moveTheShip(grid, direction) {
 	let shipLoc = findGridMidpoint(grid);
 	console.log('shipLoc before = ', shipLoc);
 
-	/* NOTE ON CHANGE IN MOVE DIRECTIONS
+	/* NOTE ON CHANGE IN NORTH/SOUTH MOVE DIRECTIONS
 
 		In the problem statement, the top-left corner of the grid
 		is given as (0,0,0).  Based on the mine locations given
