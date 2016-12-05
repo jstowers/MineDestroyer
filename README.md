@@ -307,13 +307,15 @@ moves.
 
 9:30 am => Work to complete:
 
-	1.  Assign gridFin to gridIni for next action in recursive loop.
+	1.  Assign gridFin to gridIni for next action in recursive loop. DONE!
 
 	2.	Complete scoring functionality for step 4.
 
 	3.	Check runLoop() functionality for multi-action steps.
 
 	4.	Validate depthAdjust() functionality for each step.
+
+	5.	Trim excess empty columns or rows on gridAdjust().
 
 
 

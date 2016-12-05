@@ -53,6 +53,9 @@ function runLoop(stepObject){
 	let gridArray = makeGridArray(gridIni);
 	let gridNew = [];
 
+	let stepStorage = [];
+	let resultStorage = [];
+
 	function stepRecursive (stepCount,grid,action){
 
 		if (stepCount > maxSteps){
@@ -75,21 +78,25 @@ function runLoop(stepObject){
 			// change initial grid to string
 			let temp = makeResultString(grid);
 
-			runLogic(actionStorage);
+			actionLogic(actionStorage);
 
-			// assign initial grid the value of temp
+			// assign the initial grid the value of temp
 			// based on the recursive stack, after I call a function
 			// that changes the grid, it changes the initial grid in 
 			// actionStorage.  So I needed to save the initial grid 
 			// as a temp string.
 			actionStorage[1] = temp;
 
+			// STRUCTURE:
+			// actionStorage = [step, gridIni, action, gridFin, fireCount, moveCount];
+
 			// convert gridFin to string for printing to output
-			actionStorage[5] = makeResultString(actionStorage[5]);
+			actionStorage[3] = makeResultString(actionStorage[3]);
+			stepStorage.push(actionStorage);
 			outputAction(actionStorage);
 
 			// gridNew becomes gridIni for the next step
-			gridNew = makeGridArray(actionStorage[5]);
+			gridNew = makeGridArray(actionStorage[3]);
 
 		}
 
@@ -99,12 +106,18 @@ function runLoop(stepObject){
 
 	stepRecursive(1, gridArray, actions[0]);
 
+	// push stepStorage to resultStorage
+	resultStorage.push(stepStorage);
+
+	// complete all steps and calculate result
+	// calcScore(resultStorage, resultNum)
+	calcScore(resultStorage, 4);
+
+
 	function actionRecursive(stepCount, grid, action){
 
-		//console.log('action.length = ', action.length);
-
 		if (action.length === 0){
-			console.log('complete actionSteps');
+			stepStorage.push(actionStorage)
 			return;
 		}
 
@@ -117,7 +130,71 @@ function runLoop(stepObject){
 	}
 }
 
-// actionStorage = [step, gridIni, action, fireCount, moveCount, gridFin];
+function calcScore(resultStorage, resultNum) {
+
+	// resultStorage is an array
+
+	let result = ''
+	let totPoints = 0;
+
+	// resultNum
+	// ---------------------------------------------
+	// 1 = passed or hit a mine
+	// 2 = steps completed, but mines remaining
+	// 3 = all mines cleared, but steps remaining
+	// 4 = all mines cleared and no steps remaining
+
+	if (resultNum === 1 || resultNum === 2) {
+		result = 'fail';
+	} else result = 'pass';
+
+	// totPoints
+	if (resultNum === 3) {
+		totPoints = 1;
+	}
+	else if (resultNum === 4){
+		
+		let totFireCount = fireOrMoveCount(resultStorage, 'fire');
+		console.log('totFireCount = ', totFireCount);
+		let totMoveCount = fireOrMoveCount(resultStorage, 'move');
+		console.log('totMoveCount = ', totMoveCount);
+		//totPoints = resultFourScore(totFireCount, totMoveCount);
+		
+	}
+
+	//printResult(resultStorage, result, totPoints);
+
+}
+
+function fireOrMoveCount(array, type){
+
+	let index = 0;
+	let count = 0;
+	let totCount = []
+
+	// array = [step, gridIni, action, gridFin, fireCount, moveCount];
+	if (type === 'fire'){
+		index = 4;
+	} else index = 5;
+
+	totCount = array.map(function(step){
+		step.forEach(function(ele){
+			count += ele[index]
+		})
+		return count;
+	});
+
+	console.log('totCount = ', totCount[0]);
+	return totCount[0];
+}
+
+
+		
+
+
+
+
+// actionStorage = [step, gridIni, action, gridFin, fireCount, moveCount];
 function outputAction(array){
 
 	// dummy result data
@@ -126,35 +203,25 @@ function outputAction(array){
 	console.log('Step', array[0], '\n');
 	console.log(array[1], '\n');
 	console.log(array[2], '\n');
-	console.log(array[5], '\n');
+	console.log(array[3], '\n');
 	console.log(result[0], '(' + result[1] + ')', '\n');
 
 }
 
 
-function runLogic(actionStorage) {
+function actionLogic(actionStorage) {
 
 	let grid = actionStorage[1];
 	let action = actionStorage[2];
 
-	//console.log('action = ', action);
-
-	// create storage array for each action
-
-	// console.log('grid before action = ', actionStorage[1]);
-
 	// determine type of action
 	let actionResult = takeAction(actionStorage[1], action);
-	//console.log('actionResult = ', actionResult);
 
 	actionResult.forEach(function(ele){
 		actionStorage.push(ele);
 	})
 
 	// actionStorage = [step, gridIni, action, fireCount, moveCount, gridFin];
-
-	// return actionStorage
-	//console.log('actionStorage = ', actionStorage);
 	return actionStorage;
 }
 
@@ -178,7 +245,7 @@ function takeAction(grid, action){
 	}
 	// if action is move
 	else if (moveActions.includes(action)){
-		console.log('move action = ', action);
+		// returns gridFin and ship location
 		let moveResult = moveTheShip(grid, action);
 		gridFin = moveResult[0];
 		moveCount = 1;
@@ -196,7 +263,7 @@ function takeAction(grid, action){
 		process.exit(1);
 	}
 
-	return [fireCount, moveCount, gridFin];
+	return [gridFin, fireCount, moveCount];
 }
 
 
@@ -218,39 +285,6 @@ function moveTheShip(grid, direction) {
 
 	// place ship at middle of grid
 	let shipLoc = findGridMidpoint(grid);
-	//console.log('shipLoc before = ', shipLoc);
-
-	/* NOTE ON CHANGE IN NORTH/SOUTH MOVE DIRECTIONS
-
-		In the problem statement, the top-left corner of the grid
-		is given as (0,0,0).  Based on the mine locations given
-		in the problem statement, x coordinates increase 
-		from left to right and y coordinates increase from top to bottom.
-
-		This convention is customary for an x/y plane in three-dimensional
-		space.
-
-		Also in the problem statement, the direction moves are given as:
-
-			north		increment y-coordinate of ship
-			south		decrement y-coordinate of ship
-			east		increment x-coordinate of ship
-			west		decrement x-coordinate of ship
-
-		In the provided examples, I found a discrepancy in the direction
-		changes for north and south.  For north, the ship moves up the grid
-		instead of down.  This is the conventional direction of north on maps.
-		And for south, the ship moves down the grid.  These movements, however, 
-		conflict with the layout of the grid in the problem statement.
-
-		To ensure consistency with the provided examples, I'm changing the
-		north and south direction moves as follows:
-
-			north		decrement y-coordinate of ship
-			south		increment y-coordinate of ship
-	
-		The east and west coordinates remain the same.
-	*/
 
 	let directions = {};
 	directions.north = [0, -1];
@@ -265,15 +299,15 @@ function moveTheShip(grid, direction) {
 		}
 	}
 
-	//console.log('shipLoc after = ', shipLoc);
+	let gridResize = [];
 
 	if (direction === 'north' || direction === 'south'){
 
-		resizeNS(grid,shipLoc,direction);
+		gridResize = resizeNS(grid,shipLoc,direction);
 
-	} else resizeEW(grid,shipLoc,direction);
+	} else gridResize = resizeEW(grid,shipLoc,direction);
 
-	return [grid, shipLoc];
+	return [gridResize, shipLoc];
 }
 
 
