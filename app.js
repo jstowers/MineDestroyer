@@ -51,6 +51,7 @@ function runLoop(stepObject){
 	console.log('maxSteps = ', maxSteps)
 
 	let gridArray = makeGridArray(gridIni);
+	let gridNew = [];
 
 	function stepRecursive (stepCount,grid,action){
 
@@ -76,12 +77,19 @@ function runLoop(stepObject){
 
 			runLogic(actionStorage);
 
-			// convert initial and final grids to strings
+			// assign initial grid the value of temp
+			// based on the recursive stack, after I call a function
+			// that changes the grid, it changes the initial grid in 
+			// actionStorage.  So I needed to save the initial grid 
+			// as a temp string.
 			actionStorage[1] = temp;
+
+			// convert gridFin to string for printing to output
 			actionStorage[5] = makeResultString(actionStorage[5]);
 			outputAction(actionStorage);
 
-			let gridNew = makeGridArray(actionStorage[5]);
+			// gridNew becomes gridIni for the next step
+			gridNew = makeGridArray(actionStorage[5]);
 
 		}
 

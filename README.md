@@ -299,9 +299,23 @@ moves.
 
 1:05 am => Complete runLoop() with recursion for single steps.  The runLoop() worked perfectly for single action steps, but I ran into problems for multi-action steps.  I decided to add a sub-recursive loop for steps that contain multiple actions.  Will test functionality with multi-action steps in the morning.
 
-----------------------------------------------------------------------------
+------------------------------------------------------------------------------------
 
-9:00 am => Update README.  Work on scoring functions.
+9:00 am => Update README to reflect work completed yesterday.
+
+------------------------------------------------------------------------------------
+
+9:30 am => Work to complete:
+
+	1.  Assign gridFin to gridIni for next action in recursive loop.
+
+	2.	Complete scoring functionality for step 4.
+
+	3.	Check runLoop() functionality for multi-action steps.
+
+	4.	Validate depthAdjust() functionality for each step.
+
+
 
 
 
