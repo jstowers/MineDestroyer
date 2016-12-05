@@ -93,7 +93,6 @@ function runLoop(stepObject){
 			// convert gridFin to string for printing to output
 			actionStorage[3] = makeResultString(actionStorage[3]);
 			stepStorage.push(actionStorage);
-			outputAction(actionStorage);
 
 			// gridNew becomes gridIni for the next step
 			gridNew = makeGridArray(actionStorage[3]);
@@ -102,7 +101,7 @@ function runLoop(stepObject){
 
 		stepCount += 1;
 		stepRecursive(stepCount, gridNew, actions[stepCount-1]);
-	}
+	} // end function recursive
 
 	stepRecursive(1, gridArray, actions[0]);
 
@@ -111,7 +110,8 @@ function runLoop(stepObject){
 
 	// complete all steps and calculate result
 	// calcScore(resultStorage, resultNum)
-	calcScore(resultStorage, 4);
+	let result = calcScore(resultStorage, 4);
+	printResult(resultStorage, result[0], result[1]);
 
 
 	function actionRecursive(stepCount, grid, action){
@@ -130,9 +130,29 @@ function runLoop(stepObject){
 	}
 }
 
+
+// resultStorage = [[step, gridIni, action, gridFin, fireCount, moveCount]];
+function printResult(array, result, score){
+
+	array.forEach(function(step){
+
+		step.forEach(function(ele){
+			console.log('Step', ele[0], '\n');
+			console.log(ele[1], '\n');
+			console.log(ele[2], '\n');
+			console.log(ele[3], '\n');
+		});
+	});
+
+	console.log(result, '(' + score + ')', '\n');
+}
+
+
+// function calculates final result and score
+// based on the runLoop() logic
 function calcScore(resultStorage, resultNum) {
 
-	// resultStorage is an array
+	// resultStorage = [step, gridIni, action, gridFin, fireCount, moveCount]
 
 	let result = ''
 	let totPoints = 0;
@@ -155,24 +175,24 @@ function calcScore(resultStorage, resultNum) {
 	else if (resultNum === 4){
 		
 		let totFireCount = fireOrMoveCount(resultStorage, 'fire');
-		console.log('totFireCount = ', totFireCount);
+
 		let totMoveCount = fireOrMoveCount(resultStorage, 'move');
-		console.log('totMoveCount = ', totMoveCount);
-		//totPoints = resultFourScore(totFireCount, totMoveCount);
+
+		totPoints = resultFourScore(totFireCount, totMoveCount);
 		
 	}
 
-	//printResult(resultStorage, result, totPoints);
-
+	return [result, totPoints];
 }
 
+// function returns the total fire or move count, based
+// on an array for action, step, or result
 function fireOrMoveCount(array, type){
 
 	let index = 0;
 	let count = 0;
 	let totCount = []
 
-	// array = [step, gridIni, action, gridFin, fireCount, moveCount];
 	if (type === 'fire'){
 		index = 4;
 	} else index = 5;
@@ -184,28 +204,42 @@ function fireOrMoveCount(array, type){
 		return count;
 	});
 
-	console.log('totCount = ', totCount[0]);
+	// console.log('totCount ' + type + ' = ' + totCount[0]);
 	return totCount[0];
 }
 
+// function calculates the final score for 
+// result #4: all mines cleared, no steps remaining
+function resultFourScore(totFireCount, totMoveCount) {
 
-		
+	let finalScore = 0;
 
+	let numMines = initialMineCount();
 
+	let iniScore = 10 * numMines;
 
+	let fireScore = Math.min((5*totFireCount),(5*numMines));
 
-// actionStorage = [step, gridIni, action, gridFin, fireCount, moveCount];
-function outputAction(array){
+	let moveScore = Math.min((2*totMoveCount),(3*numMines));
 
-	// dummy result data
-	let result = ['pass', 5];
+	finalScore = iniScore - fireScore - moveScore;
 
-	console.log('Step', array[0], '\n');
-	console.log(array[1], '\n');
-	console.log(array[2], '\n');
-	console.log(array[3], '\n');
-	console.log(result[0], '(' + result[1] + ')', '\n');
+	// return finalScore
+	return finalScore;
+}
 
+// function calculates the initial mine count
+function initialMineCount() {
+
+	let numMines = [];
+
+	gridIni.split('').map(function(ele){
+		if(ele !== '.' && ele !== '\n'){
+			numMines.push(ele);
+		}
+	})
+
+	return numMines.length;
 }
 
 
@@ -632,35 +666,7 @@ function fireInTheHole(grid, pattern) {
 		}
 	}
 
-	// return resultant grid + shotsFired
-	// console.log('grid result = ', grid);
-	// console.log('shotsFired = ', shotsFired);
-
-	// call function to check current location to see if mine exists
-
-
-	// check resultant grid for number of mines remaining
-
-		// if all mines blown away, then win
-
-
 	return [grid, shotsFired];
-}
-
-
-// function outputs results for each step
-// step = number, gridIni = string; script = string; 
-// gridFin = string; result = array
-function output(step, gridIni, script, resultGrid, result){
-
-	let gridFin = makeResultString(resultGrid);
-
-	console.log('Step', step, '\n');
-	console.log(gridIni, '\n');
-	console.log(script, '\n');
-	console.log(gridFin, '\n');
-	console.log(result[0], '(' + result[1] + ')', '\n');
-
 }
 
 // function takes a grid array and converts

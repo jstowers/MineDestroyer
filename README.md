@@ -47,6 +47,7 @@ computer, follow these easy steps:
 	  	b.	grid.txt
 	  	c.	script.txt
 	  	d.	README.md
+	  	e.	outline.js (a basic pseudocode program outline)
 
 3.	When you're ready to start your search and destroy mission, enter
 	the following command:
@@ -309,15 +310,34 @@ moves.
 
 	1.  Assign gridFin to gridIni for next action in recursive loop. DONE!
 
-	2.	Complete scoring functionality for step 4.
+	2.	Complete scoring functionality for result #4. DONE!
 
-	3.	Check runLoop() functionality for multi-action steps.
+	3.	Print out results. DONE!
 
-	4.	Validate depthAdjust() functionality for each step.
+------------------------------------------------------------------------------------
 
-	5.	Trim excess empty columns or rows on gridAdjust().
+2:00 pm => Nearing completion of what I can accomplish within the submission deadline.  
 
+Remaining work to complete:
 
+	1.	Complete logic to determine a win or fail.
+
+	2.	Check runLoop() functionality for multi-action steps.
+
+	3.	Validate depthAdjust() functionality for each step.
+
+	4.	Trim excess empty columns or rows on gridAdjust().
+
+	5.	Complete functionality for an empty step (drop 1km, but no move/fire)
+
+------------------------------------------------------------------------------------
+
+4:00 pm => Thank you for your time and consideration.  
+
+I enjoyed working on this project and look forward to continuing the discussion with you and the CognitiveScale hiring team regarding the Software Engineer - Technology R&D (Full Stack) position.
+
+My best,
+Joe Stowers
 
 
 

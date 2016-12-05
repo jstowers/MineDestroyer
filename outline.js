@@ -8,94 +8,14 @@
 // Program Outline
 
 
-STORAGE ARRAYS:
-
-	Array Format:
-	------------------------------------------------------------------------
-	actionStorage = [step, gridIni, action, gridFin, fireCount, moveCount];
-
-	stepStorage = [[actionStorage1], [actionStorage2], . . .]
-
-	resultStorage = [[stepStorage1], [stepStorage2], . . .]
-
-
-	Process:
-	------------------------------------------------------------------------
-	actionStorage => stepStorage => resultStorage => printResult()
-
-		1.	push actionStorage to stepStorage at end of action:
-
-				stepStorage.push(actionStorage);
-
-		2.	if no more actions, push stepStorage into resultStorage:
-
-				if (stepStorage.length > 0){
-
-					stepOutput(stepStorage)
-					// this function will:
-						1. sum number of moves
-						2. sum number of shots fired
-					// push resultant array into resultStorage
-					 	resultStorage.push(stepStorage);
-
-				} else {
-					resultStorage.push(stepStorage);
-				}
-
-OUTPUT RESULT:
-
-// passed or hit a mine
-function calcScore(resultStorage, resultNum) {
-
-	let result = ''
-	let totPoints = 0;
-
-	// resultNum
-	// ---------------------------------------------
-	// 1 = passed or hit a mine
-	// 2 = steps completed, but mines remaining
-	// 3 = all mines cleared, but steps remaining
-	// 4 = all mines cleared and no steps remaining
-
-	if (resultNum === 1 || resultNum === 2) {
-		result = 'fail';
-	} else result = 'pass';
-
-	// totPoints
-	if (resultNum === 3) {
-		totPoints = 1;
-	}
-	else if (resultNum === 4){
-		let totFireCount = fireCount(resultStorage);
-		let totMoveCount = moveCount(resultStorage);
-		totPoints = resultFourScore(totFireCount, totMoveCount);
-	}
-
-	printResult(resultStorage, result, totPoints);
-
-}
-
-
-function fireOrMoveCount(array, type){
-
-	let totCount = 0;
-	// actionStorage = [step, gridIni, action, gridFin, fireCount, moveCount];
-
-	// going to add all the element 4 of a nested array
-
-
-	return totCount;
-
-}
-
 /*
-	// DONE! => read grid and script files
+	// read grid and script files (DONE!)
 
-	// read step from script file
+	// read step from script file (DONE!)
 	   	how: create object with array for step count, and actions
-	DONE!//  stepObject = {[stepCount:number, actions:[array]], . . .}
+		//  stepObject = {[stepCount:number, actions:[array]], . . .}
 
-	??	//	determine number of actions per step
+		//	determine number of actions per step (counter?)
 
 				1. blank line
 						=> go to result()
@@ -176,11 +96,45 @@ function fireOrMoveCount(array, type){
 					// YES: go back to run
 
 
-
 					// NO: go to result
+*/
+
+/*
 
 
+STORAGE ARRAYS:
 
-	// 
+	Array Format:
+	------------------------------------------------------------------------
+	actionStorage = [step, gridIni, action, gridFin, fireCount, moveCount];
+
+	stepStorage = [[actionStorage1], [actionStorage2], . . .]
+
+	resultStorage = [[stepStorage1], [stepStorage2], . . .]
+
+
+	Process:
+	------------------------------------------------------------------------
+	actionStorage => stepStorage => resultStorage => printResult()
+
+		1.	push actionStorage to stepStorage at end of action:
+
+				stepStorage.push(actionStorage);
+
+		2.	if no more actions, push stepStorage into resultStorage:
+
+				if (stepStorage.length > 0){
+
+					stepOutput(stepStorage)
+					// this function will:
+						1. sum number of moves
+						2. sum number of shots fired
+					// push resultant array into resultStorage
+					 	resultStorage.push(stepStorage);
+
+				} else {
+					resultStorage.push(stepStorage);
+				}
 
 */
+
