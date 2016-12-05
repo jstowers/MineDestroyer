@@ -15,6 +15,8 @@ let scriptIni = fs.readFileSync(scriptFile, 'utf-8');
 main();
 
 
+// function creates object with initial depths and actions
+// for each step
 function readScriptArray(array) {
 
 	// each element of the script array represents a step.
@@ -41,40 +43,41 @@ function readScriptArray(array) {
 }
 
 // run loop for running each step, and each
-// action within each step
+// action within each step (if given)
 function runLoop(stepObject){
 
 	let actions = stepObject.actions;
 	let maxSteps = stepObject.steps.length;
 	console.log('maxSteps = ', maxSteps)
-	let stepCount = 0;
 
 	let gridArray = makeGridArray(gridIni);
 
-	function stepRecursive (grid,action){
+	function stepRecursive (stepCount,grid,action){
 
-		if (stepCount === maxSteps){
+		if (stepCount > maxSteps){
+			console.log('stepCount = ', stepCount)
 			return;
 		}
 
 		console.log('action = ', action);
+		console.log('stepCount = ', stepCount);
 		console.log('grid = ', grid);
 
 		if (action.length > 1){
-			actionRecursive(grid,action);
+			actionRecursive(stepCount,grid,action);
 		} else {
-			console.log('single action');
+
 			// insert logic for single action steps
+			runLogic(stepCount, grid, action);
 		}
 
 		stepCount += 1;
-		stepRecursive(grid, actions[stepCount]);
+		stepRecursive(stepCount, grid, actions[stepCount-1]);
 	}
 
-	stepRecursive(gridArray,actions[0]);
+	stepRecursive(1, gridArray, actions[0]);
 
-
-	function actionRecursive(grid, action){
+	function actionRecursive(stepCount,grid, action){
 
 		//console.log('action.length = ', action.length);
 
@@ -88,9 +91,18 @@ function runLoop(stepObject){
 		// insert logic for each action
 		console.log('multi-action logic')
 
-		actionRecursive(grid, action.slice(1))
+		actionRecursive(stepCount, grid, action.slice(1))
 	}
 }
+
+function runLogic(grid, action) {
+
+	//console.log('stepObject in runLogic = ', stepObject);
+
+
+
+}
+
 
 
 function fire(grid, action) {
@@ -117,13 +129,11 @@ function move(grid, action) {
 
 
 
-
+/*
 function runLogic(action, step, depth){
 
 	console.log('action = ', action, '  step = ', step, '  depth = ', depth);
 
-	
-/*
 	let fireActions = ['alpha', 'beta', 'gamma', 'delta'];
 	let moveActions = ['north', 'south', 'east', 'west'];
 
@@ -147,10 +157,9 @@ function runLogic(action, step, depth){
 			' is an incorrect firing action or move.' + '\n' + 'Exiting Game.');
 		process.exit(1);
 	}
-	*/
-
-
 }
+*/
+
 
 
 function main() {
