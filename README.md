@@ -257,8 +257,7 @@ output (and data types) were desired.  This process took a few hours to think th
 
 8:00 pm => I next analyzed how I wanted to store my data as the game progresses.  
 
-First, each action contains a basic set of data that is needed to print the result.  
-This data is stored in an array called actionStorage[].
+First, each action contains a basic set of data that is needed to print the result.  This data is stored in an array called actionStorage[].
 
 Then each step contains one or more actions.  The stepStorage[] array stores each actionStorage[] array for that particular step.
 
@@ -294,14 +293,11 @@ one action or many depending on the mine locations, the fire patterns, and the s
 moves.
 
 
-====================================================================================
+------------------------------------------------------------------------------------
 
 *Monday, 12/5/2016*
 
-1:05 am => Complete runLoop() with recursion for single steps.  The runLoop() worked perfectly for single action steps, but I ran into problems for multi-action steps.  
-
-I decided to add a sub-recursive loop for steps that contain multiple actions.  
-Will test multi-actions steps in the morning.
+1:05 am => Complete runLoop() with recursion for single steps.  The runLoop() worked perfectly for single action steps, but I ran into problems for multi-action steps.  I decided to add a sub-recursive loop for steps that contain multiple actions.  Will test functionality with multi-action steps in the morning.
 
 ----------------------------------------------------------------------------
 
