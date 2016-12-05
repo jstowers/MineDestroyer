@@ -48,7 +48,7 @@ function runLoop(stepObject){
 
 	let actions = stepObject.actions;
 	let maxSteps = stepObject.steps.length;
-	console.log('maxSteps = ', maxSteps)
+	// console.log('maxSteps = ', maxSteps)
 
 	let gridArray = makeGridArray(gridIni);
 	let gridNew = [];
@@ -56,7 +56,7 @@ function runLoop(stepObject){
 	function stepRecursive (stepCount,grid,action){
 
 		if (stepCount > maxSteps){
-			console.log('stepCount = ', stepCount)
+			// console.log('stepCount = ', stepCount)
 			return;
 		}
 
@@ -120,6 +120,7 @@ function runLoop(stepObject){
 // actionStorage = [step, gridIni, action, fireCount, moveCount, gridFin];
 function outputAction(array){
 
+	// dummy result data
 	let result = ['pass', 5];
 
 	console.log('Step', array[0], '\n');
@@ -140,11 +141,11 @@ function runLogic(actionStorage) {
 
 	// create storage array for each action
 
-	console.log('grid before action = ', actionStorage[1]);
+	// console.log('grid before action = ', actionStorage[1]);
 
 	// determine type of action
 	let actionResult = takeAction(actionStorage[1], action);
-	console.log('actionResult = ', actionResult);
+	//console.log('actionResult = ', actionResult);
 
 	actionResult.forEach(function(ele){
 		actionStorage.push(ele);
@@ -153,7 +154,7 @@ function runLogic(actionStorage) {
 	// actionStorage = [step, gridIni, action, fireCount, moveCount, gridFin];
 
 	// return actionStorage
-	console.log('actionStorage = ', actionStorage);
+	//console.log('actionStorage = ', actionStorage);
 	return actionStorage;
 }
 
@@ -169,12 +170,10 @@ function takeAction(grid, action){
 
 	// if action is firing pattern
 	if (fireActions.includes(action)){
-		console.log('fire action = ', action);
+
 		// returns gridFin and shots fired
-		console.log('grid = ', grid);
 		let fireResult = fireInTheHole(grid, action);
 		gridFin = fireResult[0];
-		console.log('gridFin = ', gridFin);
 		fireCount = fireResult[1];
 	}
 	// if action is move
@@ -205,10 +204,10 @@ function main() {
 
 	// create array for each step in script file
 	let scriptArray = makeScriptArray(scriptIni);
-	console.log('scriptArray = ', scriptArray);
+	// console.log('scriptArray = ', scriptArray);
 
 	let stepObject = readScriptArray(scriptArray);
-	console.log('stepObject = ', stepObject);
+	// console.log('stepObject = ', stepObject);
 
 	runLoop(stepObject);
 
@@ -331,26 +330,26 @@ function resizeEW(grid, shipLoc, direction) {
 
 	let x = shipLoc[0];
 	let y = shipLoc[1];
-	console.log('x =', x, '  y =', y);
+	//console.log('x =', x, '  y =', y);
 
 	// n (across) => x axis
 	let n = grid.length;
 
 	// m (down) => y axis
 	let m = grid[0].length;
-	console.log('m = ', m);
+	//console.log('m = ', m);
 
 	let xRight = n - x - 1;
-	console.log('xRight =', xRight);
+	//console.log('xRight =', xRight);
 	let xLeft = x - 0;
-	console.log('xLeft =', xLeft);
+	//console.log('xLeft =', xLeft);
 
 	let xDiff = xRight - xLeft;
-	console.log('xDiff =', xDiff);
+	//console.log('xDiff =', xDiff);
 
 	let tempString = makeResultString(grid);
 	let strToArr = tempString.split('\n');
-	console.log('strToArr = ', strToArr);
+	//console.log('strToArr = ', strToArr);
 
 	let string = '';
 
@@ -359,7 +358,7 @@ function resizeEW(grid, shipLoc, direction) {
 	for (var k = 0; k < Math.abs(xDiff); k++) {
 		string += '.';
 	}
-	console.log('string = ', string);
+	//console.log('string = ', string);
 
 	let resultString = '';
 
@@ -375,7 +374,7 @@ function resizeEW(grid, shipLoc, direction) {
 	}
 
 	let result = strToArr.toString().split(',').join("\n");
-	console.log('result = ' + '\n' + result);
+	//console.log('result = ' + '\n' + result);
 
 	return result;
 }
@@ -481,11 +480,11 @@ function findGridMidpoint(grid) {
 
 	// n (across) => x axis
 	let n = grid.length;
-	console.log('n = ', n);
+	//console.log('n = ', n);
 
 	// m (down) => y axis
 	let m = grid[0].length;
-	console.log('m = ', m);
+	//console.log('m = ', m);
 
 	// midpoint of n
 	let nMid = Math.round(n/2) - 1;
@@ -568,15 +567,15 @@ function fireInTheHole(grid, pattern) {
 
 	// place ship at middle of grid
 	let shipLoc = findGridMidpoint(grid);
-	console.log('shipLoc = ', shipLoc);
+	//console.log('shipLoc = ', shipLoc);
 
 	// return array of offset coordinates for fire pattern
 	let firePattern = getFiringPattern(pattern);
-	console.log('firePattern = ', firePattern);
+	//console.log('firePattern = ', firePattern);
 
 	// convert offset locations to grid coordinates
 	let offsets = offsetToCords(grid, shipLoc, firePattern);
-	console.log('offsets = ', offsets);
+	//console.log('offsets = ', offsets);
 
 	// calculate shots fired
 	let shotsFired = offsets.length;
@@ -600,8 +599,8 @@ function fireInTheHole(grid, pattern) {
 	}
 
 	// return resultant grid + shotsFired
-	console.log('grid result = ', grid);
-	console.log('shotsFired = ', shotsFired);
+	// console.log('grid result = ', grid);
+	// console.log('shotsFired = ', shotsFired);
 
 	// call function to check current location to see if mine exists
 
