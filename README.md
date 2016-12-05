@@ -218,6 +218,8 @@ Although this seemed a bit more intensive at the outset,
 after accessing object properties in nested for loops, the ASCII method 
 may have been more efficient.
 
+----------------------------------------------------------------------------
+
 8:30 am => Thought of another method to process the depth change 
 adjustment.
 
@@ -229,10 +231,11 @@ new characters in a result array, and then insert them into the grid.
 The result array could look like: [[[1,1], 'b'], [[2,3], '*'], [[5,5], 'Z']].  
 I will consider this refactor if time permits.
 
+----------------------------------------------------------------------------
+
 12:00 pm => Prepare scoring functions.
 
-
-*Monday, 12/5/2016*
+----------------------------------------------------------------------------
 
 2:00 pm => Spent about 2 hours hand drawing a computational flow diagram for this
 program.  Needed to work through all of the functionality that I created and make the proper linkages.  Very similar to creating a process flow diagram for chemical
@@ -245,6 +248,7 @@ My basic computational flow:
 For work functions, I analyzed what inputs (and data types) were needed and what 
 output (and data types) were desired.  This process took a few hours to think through.
 
+----------------------------------------------------------------------------
 
 8:00 pm => I next analyzed how I wanted to store my data as the game progresses.  
 
@@ -272,11 +276,11 @@ Here is an overview of the data storage process and array structures:
 
 			stepStorage = [[actionStorage1], [actionStorage2], . . .]
 
-
 		resultStorage[]:
 
 			resultStorage = [[stepStorage1], [stepStorage2], . . .]
 
+----------------------------------------------------------------------------
 
 10:00 pm => Worked on a basic recursive runLoop() function to process each action.  I decided that an action is the smallest computational block and it requires only a grid
 and an action (fire/move) to run.  I used recursion instead of for loops because the
@@ -287,8 +291,14 @@ moves.
 The runLoop() worked perfectly for single action steps, but I ran into problems for
 multi-action steps.  I decided to add a sub-recursive loop for steps that contain multiple actions.
 
+----------------------------------------------------------------------------
+
+
+*Monday, 12/5/2016*
 
 1:05 am => Complete runLoop() with recursion for single steps.
+
+----------------------------------------------------------------------------
 
 
 
