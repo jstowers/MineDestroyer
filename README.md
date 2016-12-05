@@ -47,6 +47,7 @@ computer, follow these easy steps:
 	  	b.	grid.txt
 	  	c.	script.txt
 	  	d.	README.md
+	  	e.	outline.js (a basic pseudocode program outline)
 
 3.	When you're ready to start your search and destroy mission, enter
 	the following command:
@@ -67,6 +68,8 @@ to read in the grid and script files.  I researched using callbacks and
 promises for the fs.read method, but decided that since the files were
 small, a straightforward synchronous function was more efficient.
 
+----------------------------------------------------------------------------
+
 
 *Friday, 12/2/2016*
 
@@ -76,7 +79,6 @@ structure, I decided to use nested arrays with for loops.  This allows
 for straightforward manipulation of array elements, including firing
 at the mines, moving locations, and changing depth.
 
-
 I divided the problem into the following:
 
 	1.	main() - basic program flow, stepping through the script file
@@ -84,8 +86,12 @@ I divided the problem into the following:
 	3.  logic - fire, move, resize, pass over mine
 	4.	output - print results in requested format
 
+----------------------------------------------------------------------------
+
 4:00 pm => Worked in the afternoon on looping through the grid structure
 and the firing functionality.
+
+----------------------------------------------------------------------------
 
 
 *Saturday, 12/3/2016*
@@ -218,6 +224,8 @@ Although this seemed a bit more intensive at the outset,
 after accessing object properties in nested for loops, the ASCII method 
 may have been more efficient.
 
+----------------------------------------------------------------------------
+
 8:30 am => Thought of another method to process the depth change 
 adjustment.
 
@@ -229,16 +237,107 @@ new characters in a result array, and then insert them into the grid.
 The result array could look like: [[[1,1], 'b'], [[2,3], '*'], [[5,5], 'Z']].  
 I will consider this refactor if time permits.
 
+----------------------------------------------------------------------------
+
 12:00 pm => Prepare scoring functions.
 
+----------------------------------------------------------------------------
+
+2:00 pm => Spent about 2 hours hand drawing a computational flow diagram for this
+program.  Needed to work through all of the functionality that I created and make the proper linkages.  Very similar to creating a process flow diagram for chemical
+engineering.
+
+My basic computational flow:
+
+	GridIni + Action (Fire/Move) => Work Done => GridFin => Check Result => Loop Back or Print Result
+
+For work functions, I analyzed what inputs (and data types) were needed and what 
+output (and data types) were desired.  This process took a few hours to think through.
+
+----------------------------------------------------------------------------
+
+8:00 pm => I next analyzed how I wanted to store my data as the game progresses.  
+
+First, each action contains a basic set of data that is needed to print the result.  This data is stored in an array called actionStorage[].
+
+Then each step contains one or more actions.  The stepStorage[] array stores each actionStorage[] array for that particular step.
+
+Finally, the resultStorage[] array stores all the stepStorage[] arrays for each
+completed step.  resultStorage[] is then printed as output in the desired format.
+
+Here is an overview of the data storage process and array structures:
+
+	Process:
+
+		actionStorage => stepStorage => resultStorage => printResult()
+
+	Data Structures:	
+
+		actionStorage[]:
+
+			actionStorage = [step, gridIni, action, gridFin, fireCount, moveCount]
+
+		stepStorage[]:
+
+			stepStorage = [[actionStorage1], [actionStorage2], . . .]
+
+		resultStorage[]:
+
+			resultStorage = [[stepStorage1], [stepStorage2], . . .]
+
+----------------------------------------------------------------------------
+
+10:00 pm => Worked on a basic recursive runLoop() function to process each action.  I decided that an action is the smallest computational block and it requires only a grid
+and an action (fire/move) to run.  I used recursion instead of for loops because the
+number of actions that the computer will run is not known at the outset.  It could be
+one action or many depending on the mine locations, the fire patterns, and the ship
+moves.
+
+
+------------------------------------------------------------------------------------
 
 *Monday, 12/5/2016*
 
-1:05 am => Complete runLoop() with recursion for steps and actions.
+1:05 am => Complete runLoop() with recursion for single steps.  The runLoop() worked perfectly for single action steps, but I ran into problems for multi-action steps.  I decided to add a sub-recursive loop for steps that contain multiple actions.  Will test functionality with multi-action steps in the morning.
 
+------------------------------------------------------------------------------------
 
+9:00 am => Update README to reflect work completed yesterday.
 
+------------------------------------------------------------------------------------
 
+9:30 am => Work to complete:
+
+	1.  Assign gridFin to gridIni for next action in recursive loop. DONE!
+
+	2.	Complete scoring functionality for result #4. DONE!
+
+	3.	Print out results. DONE!
+
+------------------------------------------------------------------------------------
+
+2:00 pm => Nearing completion of what I can accomplish within the submission deadline.  
+
+Remaining work to complete:
+
+	1.	Complete logic to determine a win or fail.
+
+	2.	Check runLoop() functionality for multi-action steps.
+
+	3.	Validate depthAdjust() functionality for each step.
+
+	4.	Trim excess empty columns or rows on gridAdjust().
+
+	5.	Complete functionality for an empty step (drop 1km, but no move/fire)
+
+------------------------------------------------------------------------------------
+
+4:00 pm => Thank you for your time and consideration.  
+
+I enjoyed working on this project and look forward to continuing the discussion with you and the CognitiveScale hiring team regarding the Software Engineer - Technology R&D (Full Stack) position.
+
+My best,
+Joe Stowers
 
 
 
