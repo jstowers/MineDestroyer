@@ -234,9 +234,54 @@ I will consider this refactor if time permits.
 
 *Monday, 12/5/2016*
 
+2:00 pm => Spent about 2 hours hand drawing a computational flow diagram for this
+program.  Very similar to creating a process flow diagram for chemical
+engineering.
+
+	GridIni + Action (Fire/Move) => Work Done => GridFin => Check Result => 
+
+		Loop Back or Print Result
+
+For work functions, I analyzed what inputs (and data types) were needed and what 
+output (and data types) were desired.  This process took a few hours to think through.
+
+
+8:00 pm => I next analyzed how I wanted to store my data as the game progresses.  
+In my algorithm, each action contains a basic set of data that is needed to print the result.  This data is stored in an array called actionStorage[].
+
+Then each step contains one or more actions.  The stepStorage[] array stores each actionStorage[] array for that particular step.
+
+Finally, the resultStorage[] array stores all the stepStorage[] arrays for each
+completed step.  resultStorage[] is then printed as output in the desired format.
+
+Here is an overview of the storage process and array structures:
+
+	Process:
+
+		actionStorage => stepStorage => resultStorage => printResult()
+
+	Data Structures:	
+
+	actionStorage[]:
+	```` javascript
+
+		actionStorage = [step, gridIni, action, gridFin, fireCount, moveCount]
+
+	````
+
+	stepStorage[]:
+	```` javascript
+		stepStorage = [[actionStorage1], [actionStorage2], . . .]
+
+	````
+
+	resultStorage[]:
+	```` javascript
+		resultStorage = [[stepStorage1], [stepStorage2], . . .]
+
+	````
+
 1:05 am => Complete runLoop() with recursion for steps and actions.
-
-
 
 
 

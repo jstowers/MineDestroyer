@@ -80,11 +80,13 @@ function runLoop(stepObject){
 			actionStorage[1] = temp;
 			actionStorage[5] = makeResultString(actionStorage[5]);
 			outputAction(actionStorage);
-		
+
+			let gridNew = makeGridArray(actionStorage[5]);
+
 		}
 
 		stepCount += 1;
-		stepRecursive(stepCount, grid, actions[stepCount-1]);
+		stepRecursive(stepCount, gridNew, actions[stepCount-1]);
 	}
 
 	stepRecursive(1, gridArray, actions[0]);
