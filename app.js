@@ -9,80 +9,199 @@ var scriptFile = process.argv[3];
 // Since both files are small, I chose the simpler synchronous
 // calls instead of asynchronous.
 let gridIni = fs.readFileSync(fieldFile, 'utf-8');
-console.log('gridIni' + '\n' + gridIni + '\n');
 let scriptIni = fs.readFileSync(scriptFile, 'utf-8');
 
 // Call function main()
 main();
 
+
+// function creates object with initial depths and actions
+// for each step
+function readScriptArray(array) {
+
+	// each element of the script array represents a step.
+	// after completing all actions in each step, the ship
+	// will drop in -1 km in depth
+
+	let stepCount = 1;
+	let depth = 0;
+
+	let stepObject = {};
+	stepObject.steps = [];
+	stepObject.depthIni = [];
+	stepObject.actions = [];
+
+	array.forEach(function(ele){
+		stepObject.steps.push(stepCount);
+		stepObject.depthIni.push(depth);
+		stepObject.actions.push(ele);
+		stepCount++
+		depth--;
+	});
+
+	return stepObject;
+}
+
+// run loop for running each step, and each
+// action within each step (if given)
+function runLoop(stepObject){
+
+	let actions = stepObject.actions;
+	let maxSteps = stepObject.steps.length;
+	console.log('maxSteps = ', maxSteps)
+
+	let gridArray = makeGridArray(gridIni);
+
+	function stepRecursive (stepCount,grid,action){
+
+		if (stepCount > maxSteps){
+			console.log('stepCount = ', stepCount)
+			return;
+		}
+
+		//console.log('action = ', action);
+		//console.log('stepCount = ', stepCount);
+		//console.log('grid = ', grid);
+
+		if (action.length > 1){
+			actionRecursive(stepCount,grid,action);
+
+		} else {
+
+			let actionStorage = [];
+			actionStorage.push(stepCount, grid, action[0]);
+
+			// change initial grid to string
+			let temp = makeResultString(grid);
+
+			runLogic(actionStorage);
+
+			// convert initial and final grids to strings
+			actionStorage[1] = temp;
+			actionStorage[5] = makeResultString(actionStorage[5]);
+			outputAction(actionStorage);
+		
+		}
+
+		stepCount += 1;
+		stepRecursive(stepCount, grid, actions[stepCount-1]);
+	}
+
+	stepRecursive(1, gridArray, actions[0]);
+
+	function actionRecursive(stepCount, grid, action){
+
+		//console.log('action.length = ', action.length);
+
+		if (action.length === 0){
+			console.log('complete actionSteps');
+			return;
+		}
+
+		// console.log('action = ', action[0]);
+		// console.log('grid = ', grid);
+		// insert logic for each action
+		// console.log('multi-action logic')
+
+		actionRecursive(stepCount, grid, action.slice(1))
+	}
+}
+
+// actionStorage = [step, gridIni, action, fireCount, moveCount, gridFin];
+function outputAction(array){
+
+	let result = ['pass', 5];
+
+	console.log('Step', array[0], '\n');
+	console.log(array[1], '\n');
+	console.log(array[2], '\n');
+	console.log(array[5], '\n');
+	console.log(result[0], '(' + result[1] + ')', '\n');
+
+}
+
+
+function runLogic(actionStorage) {
+
+	let grid = actionStorage[1];
+	let action = actionStorage[2];
+
+	//console.log('action = ', action);
+
+	// create storage array for each action
+
+	console.log('grid before action = ', actionStorage[1]);
+
+	// determine type of action
+	let actionResult = takeAction(actionStorage[1], action);
+	console.log('actionResult = ', actionResult);
+
+	actionResult.forEach(function(ele){
+		actionStorage.push(ele);
+	})
+
+	// actionStorage = [step, gridIni, action, fireCount, moveCount, gridFin];
+
+	// return actionStorage
+	console.log('actionStorage = ', actionStorage);
+	return actionStorage;
+}
+
+function takeAction(grid, action){
+
+	let fireCount = 0;
+	let fireActions = ['alpha', 'beta', 'gamma', 'delta'];
+
+	let moveCount = 0;
+	let moveActions = ['north', 'south', 'east', 'west'];
+
+	let gridFin = [];
+
+	// if action is firing pattern
+	if (fireActions.includes(action)){
+		console.log('fire action = ', action);
+		// returns gridFin and shots fired
+		console.log('grid = ', grid);
+		let fireResult = fireInTheHole(grid, action);
+		gridFin = fireResult[0];
+		console.log('gridFin = ', gridFin);
+		fireCount = fireResult[1];
+	}
+	// if action is move
+	else if (moveActions.includes(action)){
+		console.log('move action = ', action);
+		let moveResult = moveTheShip(grid, action);
+		gridFin = moveResult[0];
+		moveCount = 1;
+	} 
+	// if action is blank line ' '
+	else if (action === ''){
+		console.log('Blank Line');
+		// need to step through to next step
+	}
+	// exit game if incorrect action
+	else {
+		console.log('ERROR: '+ action + 
+			' is an incorrect firing action or move.' + '\n' + 
+			'Please check your script file and try again.');
+		process.exit(1);
+	}
+
+	return [fireCount, moveCount, gridFin];
+}
+
+
 function main() {
 
 	// create array for each step in script file
-	var scriptArray = makeScriptArray(scriptIni);
-	var gridArray = makeGridArray(gridIni);
+	let scriptArray = makeScriptArray(scriptIni);
+	console.log('scriptArray = ', scriptArray);
 
-	let moveCounter = 0;
-	let fireArray = [];
-	let moveArray = [];
+	let stepObject = readScriptArray(scriptArray);
+	console.log('stepObject = ', stepObject);
 
-	// loop through each step of scriptArray
-	for (var i = 0; i < scriptArray.length; i++){
+	runLoop(stepObject);
 
-		// if script line is blank, then vessel should 
-		// drop 1km without firing or moving.
-		// print result and go to next line
-		if (scriptArray[i] === ''){
-			console.log('inside a blank line');
-			// need to call function dropKM()
-			// print result
-		}
-
-		// script line contains move, firing pattern, or both
-		else {
-			// function to read step and create array of action(s)
-			// can have multiple actions per step
-			let stepArray = makeStepArray(scriptArray[i]);
-
-			
-			// function to perform logic on each action
-			for (var j = 0; j < stepArray.length; j++){
-
-				let fireActions = ['alpha', 'beta', 'gamma', 'delta'];
-				let moveActions = ['north', 'south', 'east', 'west'];
-
-				// if action is firing pattern
-				if (fireActions.includes(stepArray[j])){
-					fireArray = fireInTheHole(gridArray, stepArray[j]);
-				
-				}
-				// if action is move
-				else if (moveActions.includes(stepArray[j])){
-					moveCounter += 1;
-					moveArray = moveTheShip(gridArray, stepArray[j]);
-					
-				} else {
-				// exit game if incorrect action	
-					console.log('ERROR: '+ stepArray[j] + 
-						' is an incorrect firing action or move.' + '\n' + 'Exiting Game.');
-					process.exit(1);
-				}
-
-			} // end stepArray for loop
-
-			depthAdjust(gridArray, -1);
-		}
-
-		// function to calculate result after all actions
-
-		let result = ['pass', 1]
-
-		// function to output result for step
-		output(i+1, gridIni, scriptArray[i], moveArray[0], result);
-
-
-		// if game not over, loop to next step
-
-	} // end scriptArray for loop
 } // end function main
 
 
@@ -90,7 +209,7 @@ function moveTheShip(grid, direction) {
 
 	// place ship at middle of grid
 	let shipLoc = findGridMidpoint(grid);
-	console.log('shipLoc before = ', shipLoc);
+	//console.log('shipLoc before = ', shipLoc);
 
 	/* NOTE ON CHANGE IN NORTH/SOUTH MOVE DIRECTIONS
 
@@ -137,7 +256,7 @@ function moveTheShip(grid, direction) {
 		}
 	}
 
-	console.log('shipLoc after = ', shipLoc);
+	//console.log('shipLoc after = ', shipLoc);
 
 	if (direction === 'north' || direction === 'south'){
 
@@ -155,22 +274,22 @@ function resizeNS(grid, shipLoc, direction) {
 
 	let x = shipLoc[0];
 	let y = shipLoc[1];
-	console.log('x =', x, '  y =', y);
+	//console.log('x =', x, '  y =', y);
 
 	// n (across) => x axis
 	let n = grid.length;
 
 	// m (down) => y axis
 	let m = grid[0].length;
-	console.log('m = ', m);
+	//console.log('m = ', m);
 
 	let yAbove = y - 0;
-	console.log('yAbove =', yAbove);
+	//console.log('yAbove =', yAbove);
 	let yBelow = m - y - 1;
-	console.log('yBelow =', yBelow);
+	//console.log('yBelow =', yBelow);
 
 	let yDiff = yBelow - yAbove;
-	console.log('yDiff =', yDiff)
+	//console.log('yDiff =', yDiff)
 
 	let stringAdd = '';
 
@@ -190,7 +309,7 @@ function resizeNS(grid, shipLoc, direction) {
 		result = tempString + '\n' + stringAdd;
 	}
 
-	console.log('result = ' + '\n' + result);
+	//console.log('result = ' + '\n' + result);
 
 	return result;
 }
@@ -344,13 +463,6 @@ function depthAdjust(grid, depth){
   // return updated grid
   return grid
 }
-
-
-
-
-
-
-
 
 
 // function returns the midpoint [x,y] of an n x m grid,
@@ -540,10 +652,22 @@ function makeStepArray(string) {
 }
 
 
+// function takes a script file as a string,
+// splits it into an array with each element
+// representing a step, then splits each step
+// into multiple actions (if more than one).
+// function returns an array.
 function makeScriptArray(string) {
 
 	let strToArr = string.split('\n');
-	return strToArr;
+
+	let scriptArray = [];
+
+	strToArr.forEach(function(ele){
+		scriptArray.push(ele.split(" "));
+	});
+
+	return scriptArray;
 }
 
 
@@ -581,7 +705,6 @@ function makeGridArray(string){
   */
 
   // return nested array
-  console.log('makeGridArray =', array)
   return array;
 }
 
