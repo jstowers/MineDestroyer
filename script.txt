@@ -1,2 +1,4 @@
 gamma
+north
+south
 alpha
