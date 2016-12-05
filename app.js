@@ -40,33 +40,56 @@ function readScriptArray(array) {
 	return stepObject;
 }
 
-
+// run loop for running each step, and each
+// action within each step
 function runLoop(stepObject){
 
 	let actions = stepObject.actions;
 	let maxSteps = stepObject.steps.length;
+	console.log('maxSteps = ', maxSteps)
+	let stepCount = 0;
 
-	let stepCount = 1;
 	let gridArray = makeGridArray(gridIni);
 
-	function recursive (grid,action){
+	function stepRecursive (grid,action){
 
-		if (stepCount > maxSteps){
+		if (stepCount === maxSteps){
 			return;
 		}
 
-		console.log('grid in recursive = ', grid);
 		console.log('action = ', action);
+		console.log('grid = ', grid);
+
+		if (action.length > 1){
+			actionRecursive(grid,action);
+		} else {
+			console.log('single action');
+			// insert logic for single action steps
+		}
 
 		stepCount += 1;
-
-		recursive(grid, actions[stepCount]);
-
+		stepRecursive(grid, actions[stepCount]);
 	}
 
-	recursive(gridArray,actions[stepCount]);
+	stepRecursive(gridArray,actions[0]);
 
 
+	function actionRecursive(grid, action){
+
+		//console.log('action.length = ', action.length);
+
+		if (action.length === 0){
+			console.log('complete actionSteps');
+			return;
+		}
+
+		console.log('action = ', action[0]);
+		console.log('grid = ', grid);
+		// insert logic for each action
+		console.log('multi-action logic')
+
+		actionRecursive(grid, action.slice(1))
+	}
 }
 
 
