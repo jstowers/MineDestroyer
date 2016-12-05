@@ -41,7 +41,7 @@ computer, follow these easy steps:
 		$ cd MineDestroyer
 
 
-2.  check to make sure you have the necessary files:
+2.  Check to make sure you have the necessary files:
 
 	  	$ ls
 
