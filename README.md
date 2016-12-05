@@ -235,26 +235,28 @@ I will consider this refactor if time permits.
 *Monday, 12/5/2016*
 
 2:00 pm => Spent about 2 hours hand drawing a computational flow diagram for this
-program.  Very similar to creating a process flow diagram for chemical
+program.  Needed to work through all of the functionality that I created and make the proper linkages.  Very similar to creating a process flow diagram for chemical
 engineering.
 
-	GridIni + Action (Fire/Move) => Work Done => GridFin => Check Result => 
+My basic computational flow:
 
-		Loop Back or Print Result
+	GridIni + Action (Fire/Move) => Work Done => GridFin => Check Result => Loop Back or Print Result
 
 For work functions, I analyzed what inputs (and data types) were needed and what 
 output (and data types) were desired.  This process took a few hours to think through.
 
 
 8:00 pm => I next analyzed how I wanted to store my data as the game progresses.  
-In my algorithm, each action contains a basic set of data that is needed to print the result.  This data is stored in an array called actionStorage[].
+
+First, each action contains a basic set of data that is needed to print the result.  
+This data is stored in an array called actionStorage[].
 
 Then each step contains one or more actions.  The stepStorage[] array stores each actionStorage[] array for that particular step.
 
 Finally, the resultStorage[] array stores all the stepStorage[] arrays for each
 completed step.  resultStorage[] is then printed as output in the desired format.
 
-Here is an overview of the storage process and array structures:
+Here is an overview of the data storage process and array structures:
 
 	Process:
 
@@ -262,26 +264,31 @@ Here is an overview of the storage process and array structures:
 
 	Data Structures:	
 
-	actionStorage[]:
-	```` javascript
+		actionStorage[]:
 
-		actionStorage = [step, gridIni, action, gridFin, fireCount, moveCount]
+			actionStorage = [step, gridIni, action, gridFin, fireCount, moveCount]
 
-	````
+		stepStorage[]:
 
-	stepStorage[]:
-	```` javascript
-		stepStorage = [[actionStorage1], [actionStorage2], . . .]
+			stepStorage = [[actionStorage1], [actionStorage2], . . .]
 
-	````
 
-	resultStorage[]:
-	```` javascript
-		resultStorage = [[stepStorage1], [stepStorage2], . . .]
+		resultStorage[]:
 
-	````
+			resultStorage = [[stepStorage1], [stepStorage2], . . .]
 
-1:05 am => Complete runLoop() with recursion for steps and actions.
+
+10:00 pm => Worked on a basic recursive runLoop() function to process each action.  I decided that an action is the smallest computational block and it requires only a grid
+and an action (fire/move) to run.  I used recursion instead of for loops because the
+number of actions that the computer will run is not known at the outset.  It could be
+one action or many depending on the mine locations, the fire patterns, and the ship
+moves.
+
+The runLoop() worked perfectly for single action steps, but I ran into problems for
+multi-action steps.  I decided to add a sub-recursive loop for steps that contain multiple actions.
+
+
+1:05 am => Complete runLoop() with recursion for single steps.
 
 
 
