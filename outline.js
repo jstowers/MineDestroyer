@@ -1,12 +1,11 @@
 // Joseph Stowers
-// December 4, 2016
+// December 5, 2016
 
 // CognitiveScale 
 // Coding Challenge
 
 // MineDestroyer
 // Program Outline
-
 
 /*
 	// read grid and script files (DONE!)

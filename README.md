@@ -36,18 +36,23 @@ computer, follow these easy steps:
 
 ### Directions for Running the App
 
-1. 	After cloning this repository, check to make sure you 
-   	have the necessary files:
+1. 	After cloning this repository, open the directory:
+
+		$ cd MineDestroyer
+
+
+2.  check to make sure you have the necessary files:
 
 	  	$ ls
 
 2.  You should have the following files:
 
-	  	a.	app.js
-	  	b.	grid.txt
-	  	c.	script.txt
-	  	d.	README.md
-	  	e.	outline.js (a basic pseudocode program outline)
+	  	a.	app.js 			main application
+	  	b.	grid.txt 		initial grid space
+	  	c.	script.txt 		ship firing patterns and moves
+	  	d.	README.md      	directions and journal
+	  	e.	outline.js 		basic pseudocode program outline
+	  	f.  test.js 		sandbox for practice code
 
 3.	When you're ready to start your search and destroy mission, enter
 	the following command:
