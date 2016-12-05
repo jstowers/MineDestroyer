@@ -67,6 +67,8 @@ to read in the grid and script files.  I researched using callbacks and
 promises for the fs.read method, but decided that since the files were
 small, a straightforward synchronous function was more efficient.
 
+----------------------------------------------------------------------------
+
 
 *Friday, 12/2/2016*
 
@@ -76,7 +78,6 @@ structure, I decided to use nested arrays with for loops.  This allows
 for straightforward manipulation of array elements, including firing
 at the mines, moving locations, and changing depth.
 
-
 I divided the problem into the following:
 
 	1.	main() - basic program flow, stepping through the script file
@@ -84,8 +85,12 @@ I divided the problem into the following:
 	3.  logic - fire, move, resize, pass over mine
 	4.	output - print results in requested format
 
+----------------------------------------------------------------------------
+
 4:00 pm => Worked in the afternoon on looping through the grid structure
 and the firing functionality.
+
+----------------------------------------------------------------------------
 
 
 *Saturday, 12/3/2016*
@@ -288,19 +293,19 @@ number of actions that the computer will run is not known at the outset.  It cou
 one action or many depending on the mine locations, the fire patterns, and the ship
 moves.
 
-The runLoop() worked perfectly for single action steps, but I ran into problems for
-multi-action steps.  I decided to add a sub-recursive loop for steps that contain multiple actions.
 
-----------------------------------------------------------------------------
-
+====================================================================================
 
 *Monday, 12/5/2016*
 
-1:05 am => Complete runLoop() with recursion for single steps.
+1:05 am => Complete runLoop() with recursion for single steps.  The runLoop() worked perfectly for single action steps, but I ran into problems for multi-action steps.  
+
+I decided to add a sub-recursive loop for steps that contain multiple actions.  
+Will test multi-actions steps in the morning.
 
 ----------------------------------------------------------------------------
 
-
+9:00 am => Update README.  Work on scoring functions.
 
 
 
