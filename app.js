@@ -245,11 +245,12 @@ function initialMineCount() {
 
 function actionLogic(actionStorage) {
 
+	let depth = actionStorage[0];
 	let grid = actionStorage[1];
 	let action = actionStorage[2];
 
 	// determine type of action
-	let actionResult = takeAction(actionStorage[1], action);
+	let actionResult = takeAction(actionStorage[1], action, depth);
 
 	actionResult.forEach(function(ele){
 		actionStorage.push(ele);
@@ -259,7 +260,7 @@ function actionLogic(actionStorage) {
 	return actionStorage;
 }
 
-function takeAction(grid, action){
+function takeAction(grid, action, depth){
 
 	let fireCount = 0;
 	let fireActions = ['alpha', 'beta', 'gamma', 'delta'];
@@ -280,7 +281,7 @@ function takeAction(grid, action){
 	// if action is move
 	else if (moveActions.includes(action)){
 		// returns gridFin and ship location
-		let moveResult = moveTheShip(grid, action);
+		let moveResult = moveTheShip(grid, action, depth);
 		gridFin = moveResult[0];
 		moveCount = 1;
 	} 
@@ -315,7 +316,7 @@ function main() {
 } // end function main
 
 
-function moveTheShip(grid, direction) {
+function moveTheShip(grid, direction,depth) {
 
 	// place ship at middle of grid
 	let shipLoc = findGridMidpoint(grid);
@@ -341,7 +342,11 @@ function moveTheShip(grid, direction) {
 
 	} else gridResize = resizeEW(grid,shipLoc,direction);
 
-	return [gridResize, shipLoc];
+	// send grid and -depth
+	let gridAdjust = depthAdjust(gridResize,-depth);
+
+	// return [gridResiz, shipLoc];
+	return [gridAdjust, shipLoc];
 }
 
 
@@ -449,6 +454,14 @@ function resizeEW(grid, shipLoc, direction) {
 
 
 function depthAdjust(grid, depth){
+
+  let resizeGrid = makeGridArray(grid);
+
+  // n (across) => x axis
+  let n = resizeGrid.length;
+
+  // m (down) => y axis 
+  let m = resizeGrid[0].length;
   
   let depthChart = {
   	1:'a',
@@ -506,15 +519,16 @@ function depthAdjust(grid, depth){
   }
 
   let newDepth = -depth;
-  console.log('newDepth = ', newDepth)
+  //console.log('newDepth = ', newDepth)
   
-  for (var i = 0; i < grid.length; i++){
-    for (var j = 0; j < grid[0].length; j++){
-      if (grid[i][j] !== '.' && grid[i][j] !== '*'){
+  for (var i = 0; i < n; i++){
+    for (var j = 0; j < m; j++){
+
+      if (resizeGrid[i][j] !== '.' && resizeGrid[i][j] !== '*'){
         let currDepth = '';
         for (var key in depthChart){
-          if(grid[i][j] === depthChart[key]){
-            //console.log('char = ', grid[i][j])
+          if(resizeGrid[i][j] === depthChart[key]){
+            //console.log('char = ', resizeGrid[i][j])
             currDepth = key;
             //console.log('currDepth = ', currDepth)
           }
@@ -524,21 +538,21 @@ function depthAdjust(grid, depth){
         //console.log('newDepth = ', newDepth);
         
         if(Number(currDepth) === newDepth){
-          console.log('newDepth = ', newDepth);
+          //console.log('newDepth = ', newDepth);
           grid[i][j] = '*';
         }
         else{
           let depthAdjust = -1 + Number(currDepth);
-          grid[i][j] = depthChart[depthAdjust];
+          resizeGrid[i][j] = depthChart[depthAdjust];
         }
-        console.log('grid[' + i + '][' + j + '] = ' + grid[i][j] );
+        //console.log('grid[' + i + '][' + j + '] = ' + resizeGrid[i][j] );
         currDepth = '';
       }
     }
   }
   
   // return updated grid
-  return grid
+  return resizeGrid;
 }
 
 

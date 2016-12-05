@@ -114,3 +114,143 @@ function makeResultGrid(grid) {
 }
 
 console.log('result Grid = ' + '\n' + makeResultGrid(testGrid));
+
+
+
+
+
+
+
+/*
+function runLogic(action, step, depth){
+
+  console.log('action = ', action, '  step = ', step, '  depth = ', depth);
+
+  let fireActions = ['alpha', 'beta', 'gamma', 'delta'];
+  let moveActions = ['north', 'south', 'east', 'west'];
+
+  // if action is firing pattern
+  if (fireActions.includes(action)){
+
+    fireInTheHole(gridArray, action);
+    //fireInTheHole(gridArray, action);
+      
+  }
+
+  /*
+  // if action is move
+  else if (moveActions.includes(action){
+    //moveCounter += 1;
+    moveArray = moveTheShip(gridArray, action);
+    
+  } else {
+  // exit game if incorrect action  
+    console.log('ERROR: '+ stepArray[j] + 
+      ' is an incorrect firing action or move.' + '\n' + 'Exiting Game.');
+    process.exit(1);
+  }
+}
+*/
+
+
+// OLD CODE FOR MAIN()
+/*
+  let moveCounter = 0;
+  let fireArray = [];
+  let moveArray = [];
+
+  // loop through each step of scriptArray
+  for (var i = 0; i < scriptArray.length; i++){
+
+    // if script line is blank, then vessel should 
+    // drop 1km without firing or moving.
+    // print result and go to next line
+    if (scriptArray[i] === ''){
+      console.log('inside a blank line');
+      // need to call function dropKM()
+      // print result
+    }
+
+    // script line contains move, firing pattern, or both
+    else {
+      // function to read step and create array of action(s)
+      // can have multiple actions per step
+      let stepArray = makeStepArray(scriptArray[i]);
+
+      
+      // function to perform logic on each action
+      for (var j = 0; j < stepArray.length; j++){
+
+        let fireActions = ['alpha', 'beta', 'gamma', 'delta'];
+        let moveActions = ['north', 'south', 'east', 'west'];
+
+        // if action is firing pattern
+        if (fireActions.includes(stepArray[j])){
+          fireArray = fireInTheHole(gridArray, stepArray[j]);
+        
+        }
+        // if action is move
+        else if (moveActions.includes(stepArray[j])){
+          moveCounter += 1;
+          moveArray = moveTheShip(gridArray, stepArray[j]);
+          
+        } else {
+        // exit game if incorrect action  
+          console.log('ERROR: '+ stepArray[j] + 
+            ' is an incorrect firing action or move.' + '\n' + 'Exiting Game.');
+          process.exit(1);
+        }
+
+      } // end stepArray for loop
+
+      depthAdjust(gridArray, -1);
+    }
+
+    // function to calculate result after all actions
+
+    let result = ['pass', 1]
+
+    // function to output result for step
+    output(i+1, gridIni, scriptArray[i], moveArray[0], result);
+
+
+    // if game not over, loop to next step
+
+  } // end scriptArray for loop
+*/
+
+/*
+OUTPUT RESULT:
+
+// passed or hit a mine
+function calcScore(resultStorage, resultNum) {
+
+  let result = ''
+  let totPoints = 0;
+
+  // resultNum
+  // ---------------------------------------------
+  // 1 = passed or hit a mine
+  // 2 = steps completed, but mines remaining
+  // 3 = all mines cleared, but steps remaining
+  // 4 = all mines cleared and no steps remaining
+
+  if (resultNum === 1 || resultNum === 2) {
+    result = 'fail';
+  } else result = 'pass';
+
+  // totPoints
+  if (resultNum === 3) {
+    totPoints = 1;
+  }
+  else if (resultNum === 4){
+    let totFireCount = fireOrMoveCount(resultStorage[4]);
+    let totMoveCount = moveOrMoveCount(resultStorage[5]);
+    totPoints = resultFourScore(totFireCount, totMoveCount);
+  }
+
+  printResult(resultStorage, result, totPoints);
+
+}
+*/
+
