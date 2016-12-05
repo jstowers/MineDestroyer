@@ -232,7 +232,9 @@ I will consider this refactor if time permits.
 12:00 pm => Prepare scoring functions.
 
 
+*Monday, 12/5/2016*
 
+1:05 am => Complete runLoop() with recursion for steps and actions.
 
 
 
