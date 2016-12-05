@@ -9,18 +9,140 @@ var scriptFile = process.argv[3];
 // Since both files are small, I chose the simpler synchronous
 // calls instead of asynchronous.
 let gridIni = fs.readFileSync(fieldFile, 'utf-8');
-console.log('gridIni' + '\n' + gridIni + '\n');
 let scriptIni = fs.readFileSync(scriptFile, 'utf-8');
 
 // Call function main()
 main();
 
+
+function readScriptArray(array) {
+
+	// each element of the script array represents a step.
+	// after completing all actions in each step, the ship
+	// will drop in -1 km in depth
+
+	let stepCount = 1;
+	let depth = 0;
+
+	let stepObject = {};
+	stepObject.steps = [];
+	stepObject.depthIni = [];
+	stepObject.actions = [];
+
+	array.forEach(function(ele){
+		stepObject.steps.push(stepCount);
+		stepObject.depthIni.push(depth);
+		stepObject.actions.push(ele);
+		stepCount++
+		depth--;
+	});
+
+	return stepObject;
+}
+
+
+function runLoop(stepObject){
+
+	let actions = stepObject.actions;
+	let maxSteps = stepObject.steps.length;
+
+	let stepCount = 1;
+	let gridArray = makeGridArray(gridIni);
+
+	function recursive (grid,action){
+
+		if (stepCount > maxSteps){
+			return;
+		}
+
+		console.log('grid in recursive = ', grid);
+		console.log('action = ', action);
+
+		stepCount += 1;
+
+		recursive(grid, actions[stepCount]);
+
+	}
+
+	recursive(gridArray,actions[stepCount]);
+
+
+}
+
+
+function fire(grid, action) {
+
+	// call torpedo offsets()
+
+	// calculate shots fired
+
+	// return grid with result
+
+}
+
+
+function move(grid, action) {
+
+
+
+
+}
+
+
+
+
+
+
+
+
+function runLogic(action, step, depth){
+
+	console.log('action = ', action, '  step = ', step, '  depth = ', depth);
+
+	
+/*
+	let fireActions = ['alpha', 'beta', 'gamma', 'delta'];
+	let moveActions = ['north', 'south', 'east', 'west'];
+
+	// if action is firing pattern
+	if (fireActions.includes(action)){
+
+		fireInTheHole(gridArray, action);
+		//fireInTheHole(gridArray, action);
+			
+	}
+
+	/*
+	// if action is move
+	else if (moveActions.includes(action){
+		//moveCounter += 1;
+		moveArray = moveTheShip(gridArray, action);
+		
+	} else {
+	// exit game if incorrect action	
+		console.log('ERROR: '+ stepArray[j] + 
+			' is an incorrect firing action or move.' + '\n' + 'Exiting Game.');
+		process.exit(1);
+	}
+	*/
+
+
+}
+
+
 function main() {
 
 	// create array for each step in script file
-	var scriptArray = makeScriptArray(scriptIni);
-	var gridArray = makeGridArray(gridIni);
+	let scriptArray = makeScriptArray(scriptIni);
+	console.log('scriptArray = ', scriptArray);
 
+	let stepObject = readScriptArray(scriptArray);
+	console.log('stepObject = ', stepObject);
+
+	runLoop(stepObject);
+
+
+	/*
 	let moveCounter = 0;
 	let fireArray = [];
 	let moveArray = [];
@@ -83,6 +205,8 @@ function main() {
 		// if game not over, loop to next step
 
 	} // end scriptArray for loop
+
+	*/
 } // end function main
 
 
@@ -540,10 +664,22 @@ function makeStepArray(string) {
 }
 
 
+// function takes a script file as a string,
+// splits it into an array with each element
+// representing a step, then splits each step
+// into multiple actions (if more than one).
+// function returns an array.
 function makeScriptArray(string) {
 
 	let strToArr = string.split('\n');
-	return strToArr;
+
+	let scriptArray = [];
+
+	strToArr.forEach(function(ele){
+		scriptArray.push(ele.split(" "));
+	});
+
+	return scriptArray;
 }
 
 
@@ -581,7 +717,6 @@ function makeGridArray(string){
   */
 
   // return nested array
-  console.log('makeGridArray =', array)
   return array;
 }
 
