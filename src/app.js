@@ -1,28 +1,14 @@
 
-// Require file system module
-var fs = require('fs');
-
 // Require app modules
 const Input = require('./Input')
 const Grid = require('./Grid');
-
-
-// Assign variables to files from command line arguments
-var fieldFile = process.argv[2];
-var scriptFile = process.argv[3];
-
-// Synchronous call to read field and script files
-// Since both files are small, I chose the simpler synchronous
-// calls instead of asynchronous.
-let gridIni = fs.readFileSync(fieldFile, 'utf-8');
-let scriptIni = fs.readFileSync(scriptFile, 'utf-8');
-
 
 function main() {
 
 	let stepObject = Input.makeStepObject();
 
 	runLoop(stepObject);
+
 
 } // end function main
 
@@ -37,14 +23,11 @@ main();
 // action within each step (if given)
 function runLoop(stepObject){
 
+	let gridIni = Input.makeInitialGrid();
 	let actions = stepObject.actions;
 	let maxSteps = stepObject.steps.length;
-	// console.log('maxSteps = ', maxSteps)
 
-	// NEED TO UPDATE THIS CODE!!
-	let gridArray = Grid.makeGridArray(gridIni);
 	let gridNew = [];
-
 	let stepStorage = [];
 	let resultStorage = [];
 
@@ -83,19 +66,26 @@ function runLoop(stepObject){
 			// actionStorage = [step, gridIni, action, gridFin, fireCount, moveCount];
 
 			// convert gridFin to string for printing to output
+			// console.log('actionStorage[3] before = ', actionStorage[3])
+
 			actionStorage[3] = makeResultString(actionStorage[3]);
+
+			// console.log('actionStorage[3] after = ', actionStorage[3]);
+
 			stepStorage.push(actionStorage);
 
 			// gridNew becomes gridIni for the next step
 			gridNew = Grid.makeGridArray(actionStorage[3]);
+			// console.log('gridNew = ', gridNew);
 
 		}
 
 		stepCount += 1;
+		
 		stepRecursive(stepCount, gridNew, actions[stepCount-1]);
 	} // end function recursive
 
-	stepRecursive(1, gridArray, actions[0]);
+	stepRecursive(1, gridIni, actions[0]);
 
 	// push stepStorage to resultStorage
 	resultStorage.push(stepStorage);
@@ -225,10 +215,16 @@ function initialMineCount() {
 
 	let numMines = [];
 
-	gridIni.split('').map(function(ele){
-		if(ele !== '.' && ele !== '\n'){
-			numMines.push(ele);
-		}
+	let gridIni = Input.makeInitialGrid();
+
+	gridIni.map(function(ele){
+
+		ele.forEach(function(index){
+
+			if(index !== '.' && index !== '\n'){
+				numMines.push(index);
+			}
+		})
 	})
 
 	return numMines.length;

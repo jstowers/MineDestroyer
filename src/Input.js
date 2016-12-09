@@ -6,6 +6,9 @@
 
 const Input = {};
 
+// Require Grid module
+const Grid = require('./Grid')
+
 // Require file system module
 const fs = require('fs');
 
@@ -13,18 +16,23 @@ const fs = require('fs');
 let fieldFile = process.argv[2];
 let scriptFile = process.argv[3];
 
-// Synchronous calls to read field and script files
-// Since both files are small, I chose the simpler synchronous
-// calls instead of asynchronous.
-let gridIni = fs.readFileSync(fieldFile, 'utf-8');
-let scriptIni = fs.readFileSync(scriptFile, 'utf-8');
+// makeInitialGrid()
+// reads field file and returns an array representing
+// the initial grid
+Input.makeInitialGrid = function() {
 
+	let gridIni = fs.readFileSync(fieldFile, 'utf-8');
+
+	return Grid.makeGridArray(gridIni);
+
+}
 
 // makeStepObject()
-// input => array representing the steps and actions in 
-// the script file
-// output => object with initial depths and actions for each step
+// reads script file and returns an object with initial
+// depths and actions for each step.
 Input.makeStepObject = function () {
+
+	let scriptIni = fs.readFileSync(scriptFile, 'utf-8');
 
 	let scriptArray = this.makeScriptArray(scriptIni);
 
@@ -68,13 +76,6 @@ Input.makeScriptArray = function(string) {
 	});
 
 	return scriptArray;
-}
-
-
-function makeStepArray(string) {
-
-	let strToArr = string.split(' ');
-	return strToArr;
 }
 
 module.exports = Input;
