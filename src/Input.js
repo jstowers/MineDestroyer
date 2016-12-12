@@ -1,10 +1,9 @@
 // Input Module
+const Input = {};
 
 // This module reads the grid and script files specified
 // in the command line execution and extracts the data
 // to create the initial data structures.
-
-const Input = {};
 
 // Require Grid module
 const Grid = require('./Grid')
@@ -15,6 +14,7 @@ const fs = require('fs');
 // Assign variables to files specified in command line arguments
 let fieldFile = process.argv[2];
 let scriptFile = process.argv[3];
+
 
 // makeInitialGrid()
 // reads field file and returns an array representing
@@ -28,6 +28,7 @@ Input.makeInitialGrid = function() {
 }
 
 // makeStepObject()
+// stepObject { steps:[ ], depthIni:[ ], actions:[ ] }
 // reads script file and returns an object with initial
 // depths and actions for each step.
 Input.makeStepObject = function () {
@@ -39,7 +40,7 @@ Input.makeStepObject = function () {
 	// each element of the script array represents a step.
 	// after completing all actions in each step, the ship
 	// will drop down -1 km in depth
-
+	
 	let stepCount = 1;
 	let depth = 0;
 
@@ -60,11 +61,12 @@ Input.makeStepObject = function () {
 }
 
 
-// function takes a script file as a string,
-// splits it into an array with each element
-// representing a step, then splits each step
+// makeScriptArray(string)
+// input  => string
+// output => array
+// takes a script file as a string, splits it into an array 
+// with each element representing a step, then splits each step
 // into multiple actions (if more than one).
-// function returns an array.
 Input.makeScriptArray = function(string) {
 
 	let strToArr = string.split('\n');
@@ -75,6 +77,7 @@ Input.makeScriptArray = function(string) {
 		scriptArray.push(ele.split(" "));
 	});
 
+	console.log('scriptArray = ', scriptArray);
 	return scriptArray;
 }
 

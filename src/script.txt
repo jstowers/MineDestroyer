@@ -1,4 +1,3 @@
-gamma
-north
-south
-alpha
+delta west
+beta
+east alpha

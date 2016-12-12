@@ -1,5 +1,11 @@
-// create Grid module
+// Grid Module
 const Grid = {};
+
+// This module generates a grid array for each step
+// of the game, calculates grid dimensions, and converts
+// a nested grid array into a string for printing the 
+// result.
+
 
 // makeGridArray() 
 // input  => string representing a grid
@@ -72,6 +78,29 @@ Grid.gridDimensions = function(string){
 
   return [xLength, yLength];
 
+}
+
+// makeResultString()
+// function takes a grid array and converts
+// it into a string for printing to output
+Grid.makeResultString = function(grid) {
+
+  let storage = [];
+  let string = '';
+
+    for (let j = 0; j < grid[0].length; j++) {
+
+      for (let i = 0; i < grid.length; i++){
+        string += grid[i][j];
+      }
+
+      storage.push(string);
+      string = "";
+    };
+
+  let result = storage.toString().split(',').join("\n");
+
+  return result;
 }
 
 
